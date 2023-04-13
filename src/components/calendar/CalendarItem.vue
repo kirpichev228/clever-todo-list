@@ -1,0 +1,68 @@
+<template>
+  <div class="cal-item">
+    <div class="cal-date">
+      <div class="cal-day">
+        14
+      </div>
+      <div class="cal-info">
+        <div class="cal-month">
+          April
+        </div>
+        <div class="cal-week">
+          Wed.
+        </div>
+      </div>
+    </div>
+    <div class="cal-tasks"></div>
+  </div>
+</template>
+
+<script setup>
+
+</script>
+
+<style scoped>
+.cal-item {
+  margin-left: 50px;
+  width: 130px;
+  height: 130px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  display: flex;
+  flex-direction: column;
+}
+
+.cal-date {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  height: 80%;
+}
+
+.cal-day {
+  font-size: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cal-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
+.cal-item:hover {
+  cursor: pointer;
+  border-color: rgba(237,75,130,0.6);
+  box-shadow: 0 0 6px rgba(237,75,130,0.6);
+}
+
+.cal-item:hover .cal-day,
+.cal-item:hover .cal-month,
+.cal-item:hover .cal-week {
+  color: rgba(237,75,130,0.6);
+}
+
+</style>
