@@ -1,13 +1,14 @@
 <template>
-  <div class="app-wrapper">
-    <Navbar></Navbar>
-    <CalendarItem></CalendarItem>
-  </div>
+    <div class="app-wrapper">
+      <Navbar></Navbar>
+      <router-view>
+
+      </router-view>
+    </div>
 </template>
 
 <script setup>
 import Navbar from './components/NavBar.vue';
-import CalendarItem from './components/calendar/CalendarItem.vue';
 
 </script>
 
@@ -31,5 +32,10 @@ import CalendarItem from './components/calendar/CalendarItem.vue';
     display: flex;
     flex-direction: column;
     gap: 20px;
+  }
+
+  :root {
+    --color-static: rgba(255, 255, 255, 0.6);
+    --color-hover: rgba(237,75,130,0.6)
   }
 </style>

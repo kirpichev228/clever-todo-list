@@ -8,6 +8,21 @@
       <ButtonSample>
         Sign Out
       </ButtonSample>
+      <ButtonSample
+        @click="$router.push('/login')"
+      >
+        Log In
+      </ButtonSample>
+      <ButtonSample
+        @click="$router.push('/register')"
+      >
+        Register
+      </ButtonSample>
+      <ButtonSample
+      @click="$router.push('/main')"
+      >
+        Main
+      </ButtonSample>
     </div>
   </nav>
 </template>
@@ -31,7 +46,7 @@ import ButtonSample from './UI/ButtonSample.vue';
     word-spacing: 8px;
     font-weight: 200;
     padding: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.6);
+    border: 1px solid var(--color-static);
     border-top-right-radius: 20px;
     border-bottom-left-radius: 20px;
   }
@@ -41,8 +56,8 @@ import ButtonSample from './UI/ButtonSample.vue';
     border-top-right-radius: 0;
     border-bottom-left-radius: 0;
     color: #ed4b82;
-    border-color: rgba(237,75,130,0.6);
-    box-shadow: 1px 1px 3px rgba(237,75,130,0.6);
+    border-color: var(--color-hover);
+    box-shadow: 1px 1px 3px var(--color-hover);
   }
 
   .nav-buttons {
