@@ -3,25 +3,12 @@
     <h1 class="heading">
       Clever ToDo
     </h1>
-    <div class="nav-buttons">
-      <span class="current-user">me@mail.ru</span>
-      <ButtonSample>
-        Sign Out
-      </ButtonSample>
+    <div class="nav-buttons" v-if="$store.state.auth.user">
+      <span class="current-user"> {{ $store.state.auth.user.email }} </span>
       <ButtonSample
-        @click="$router.push('/login')"
+        @click="$store.dispatch('logout')"
       >
-        Log In
-      </ButtonSample>
-      <ButtonSample
-        @click="$router.push('/register')"
-      >
-        Register
-      </ButtonSample>
-      <ButtonSample
-      @click="$router.push('/main')"
-      >
-        Main
+        Log Out
       </ButtonSample>
     </div>
   </nav>

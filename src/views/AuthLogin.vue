@@ -1,28 +1,28 @@
 <template>
   <div class="auth-wrapper">
-    <h2>Register</h2>
+    <h2>Log In</h2>
     <div class="inputs-field">
-      <form class="form" @submit.prevent="register">
+      <form class="form" @submit.prevent="login">
         <InputSample
           inputType="email"
-          v-model="registerForm.email"
+          @inputVal="setMail"
         >
           Email
         </InputSample>
         <InputSample
           inputType="password"
-          v-model="registerForm.password"
+          @inputVal="setPass"
         >
           Password
         </InputSample>
         <ButtonSample type="submit">
-          Register
+          Log In
         </ButtonSample>
       </form>
     </div>
     <p>
-      Already have an account?
-      <router-link class="link" to="/login">Log In</router-link>
+      Have no account?
+      <router-link class="link" to="/register">Register</router-link>
     </p>
   </div>
 </template>
@@ -30,14 +30,22 @@
 <script setup>
 import { useStore } from 'vuex';
 import { ref } from 'vue';
-import ButtonSample from '../UI/ButtonSample.vue';
-import InputSample from '../UI/InputSample.vue';
+import ButtonSample from '../components/UI/ButtonSample.vue';
+import InputSample from '../components/UI/InputSample.vue';
 
-const registerForm = ref({});
+const loginForm = ref({});
 const store = useStore();
 
 const login = () => {
-  store.dispatch('register', registerForm.value);
+  store.dispatch('login', loginForm.value);
+};
+
+const setPass = (inputValue) => {
+  loginForm.value.password = inputValue;
+};
+
+const setMail = (inputValue) => {
+  loginForm.value.email = inputValue;
 };
 
 </script>

@@ -1,11 +1,17 @@
 <template>
-  <button>
+  <button
+    :type?="buttonType"
+  >
     <slot></slot>
   </button>
 </template>
 
 <script setup>
+import { defineProps } from 'vue';
 
+defineProps({
+  buttonType: String,
+});
 </script>
 
 <style scoped>

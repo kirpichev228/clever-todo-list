@@ -8,7 +8,15 @@
 </template>
 
 <script setup>
+import { onBeforeMount } from 'vue';
+import { useStore } from 'vuex';
 import Navbar from './components/NavBar.vue';
+
+const store = useStore();
+
+onBeforeMount(() => {
+  store.dispatch('fetchUser');
+});
 
 </script>
 
