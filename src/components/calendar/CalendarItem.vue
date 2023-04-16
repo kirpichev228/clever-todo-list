@@ -13,7 +13,10 @@
         </div>
       </div>
     </div>
-    <div class="cal-tasks"></div>
+    <div class="cal-tasks">
+      <div class="cal-planned"></div>
+      <div class="cal-done"></div>
+    </div>
   </div>
 </template>
 
@@ -59,10 +62,59 @@
   box-shadow: 0 0 6px rgba(237,75,130,0.6);
 }
 
+.cal-tasks {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.cal-planned {
+  width: 10px;
+  height: 10px;
+  background: none;
+  border: 1px solid var(--color-static);
+  border-radius: 5px;
+}
+
+.cal-done {
+  width: 10px;
+  height: 10px;
+  background: var(--color-static);
+  border: 1px solid var(--color-static);
+  border-radius: 5px;
+}
+
 .cal-item:hover .cal-day,
 .cal-item:hover .cal-month,
 .cal-item:hover .cal-week {
   color: rgba(237,75,130,0.6);
+}
+
+.cal-item:hover .cal-planned {
+  border-color: var(--color-hover);
+}
+
+.cal-item:hover .cal-done {
+  background: var(--color-hover);
+  border-color: var(--color-hover);
+}
+
+.cal-planned {
+  width: 10px;
+  height: 10px;
+  background: none;
+  border: 1px solid var(--color-static);
+  border-radius: 5px;
+}
+
+.cal-done {
+  width: 10px;
+  height: 10px;
+  background: var(--color-static);
+  border: 1px solid var(--color-static);
+  border-radius: 5px;
 }
 
 </style>

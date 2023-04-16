@@ -39,18 +39,18 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
-  if (to.path === '/login' && auth.currentUser) {
-    next('/main');
-    return;
-  }
+// router.beforeEach((to, from, next) => {
+//   if (to.path === '/login' && auth.currentUser) {
+//     next('/main');
+//     return;
+//   }
 
-  if (to.matched.some((record) => record.meta.requiresAuth) && !auth.currentUser) {
-    next('/login');
-    return;
-  }
+//   if (to.matched.some((record) => record.meta.requiresAuth) && !auth.currentUser) {
+//     next('/login');
+//     return;
+//   }
 
-  next();
-});
+//   next();
+// });
 
 export default router;

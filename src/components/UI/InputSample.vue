@@ -45,6 +45,7 @@ input {
   background: none;
   border: 1px solid var(--color-static);
   outline: none;
+  padding: 0 10px;
 }
 
 input:focus {
