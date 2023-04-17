@@ -39,6 +39,7 @@ import ButtonSample from './UI/ButtonSample.vue';
   }
 
   .heading:hover {
+    cursor: default;
     border-radius: 20px;
     border-top-right-radius: 0;
     border-bottom-left-radius: 0;

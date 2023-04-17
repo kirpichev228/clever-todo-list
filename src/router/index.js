@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
-import { auth } from '@/firebase';
+// import { auth } from '@/firebase';
 
-import App from '@/App.vue';
+// import App from '@/App.vue';
 import MainPage from '@/views/MainPage.vue';
 import AuthLogin from '@/views/AuthLogin.vue';
 import AuthRegistration from '@/views/AuthRegistration.vue';

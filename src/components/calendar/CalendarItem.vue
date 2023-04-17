@@ -2,14 +2,14 @@
   <div class="cal-item">
     <div class="cal-date">
       <div class="cal-day">
-        14
+        {{ day }}
       </div>
       <div class="cal-info">
         <div class="cal-month">
-          April
+          {{ week }}
         </div>
         <div class="cal-week">
-          Wed.
+          {{ month }}
         </div>
       </div>
     </div>
@@ -21,12 +21,16 @@
 </template>
 
 <script setup>
+defineProps({
+  day: Number,
+  week: String,
+  month: String,
+});
 
 </script>
 
 <style scoped>
 .cal-item {
-  margin-left: 50px;
   width: 130px;
   height: 130px;
   border: 1px solid rgba(255, 255, 255, 0.6);
