@@ -2,11 +2,19 @@
   <div class="cal-wrapper" >
     <div class="cal-row">
       <CalendarItem
-        v-for="day in daysArray" :key="day.day"
+        v-for="day in daysArray" :key="day.id"
         :day="day.day"
         :week="day.week"
         :month="day.month"
-        @click="fetchData(day.id)"
+        @click="
+          fetchData(day.id);
+          $emit('pickedDay', {
+            id: day.id,
+            day: day.day,
+            month: day.month,
+            year: day.year
+          });
+          $emit('windowActive', true)"
       ></CalendarItem>
     </div>
   </div>
@@ -35,6 +43,7 @@ const arrPush = () => {
       day: date.getDate(),
       week: weekDayName[date.getDay()],
       month: monthName[date.getMonth()],
+      year: date.getFullYear(),
     });
   }
 };
@@ -63,6 +72,7 @@ arrPush(30);
 <style scoped>
 .cal-wrapper {
   overflow-x: scroll;
+  margin-top: 30vh;
 }
 .cal-wrapper::-webkit-scrollbar {
   display: none;

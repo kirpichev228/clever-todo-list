@@ -1,29 +1,37 @@
 export const calendarStore = {
   namespaced: true,
   state: {
-    currentDay: 0,
-    currentTask: '',
-    isDone: false,
+    currentDate: {},
+    currentTasks: [],
   },
   mutations: {
-    setCurrentDay(state, day) {
-      state.currentDay = day;
+    setCurrentDate(state, data) {
+      state.currentDate = data;
     },
-    setCurrentTask(state, task) {
-      state.currentTask = task;
+    addTask(state, data) {
+      state.currentTasks.push(data);
     },
-    setExecution(state, execution) {
-      state.isDone = execution;
+    clearTasks(state) {
+      state.currentTasks = [];
     },
   },
   actions: {
-    setCurrentDay({ commit }, day) {
-      commit('setCurrentDay', day);
+    setCurrentDate({ commit }, data) {
+      commit('setCurrentDay', data);
+    },
+    addTask({ commit }, data) {
+      commit('addTask', data);
+    },
+    clearTasks({ commit }) {
+      commit('clearTasks');
     },
   },
   getters: {
-    currentDay(state) {
-      return state.currentDay;
+    currentDate(state) {
+      return state.currentDate;
+    },
+    currentTasks(state) {
+      return state.currentTasks;
     },
   },
 };

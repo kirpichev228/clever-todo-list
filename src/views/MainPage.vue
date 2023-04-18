@@ -1,11 +1,20 @@
 <template>
   <div class="wrapper">
-    <CalendarComp></CalendarComp>
-    <div class="underline"></div>
-    <div class="day-info">
+    <CalendarComp
+      @pickedDay="setCurrentDay"
+      @windowActive="setWindowActive"
+      v-bind:class="{
+        'isActive': isWindowActive
+      }"
+    ></CalendarComp>
+    <div class="underline" v-if="isWindowActive"></div>
+    <div class="day-info" v-if="isWindowActive">
       <div class="day-tasks">
         <h2 class="heading">
-          Tasks
+          Tasks for
+          {{ currentDay.day }}
+          {{ currentDay.month }}
+          {{ currentDay.year }}
         </h2>
         <ul class="tasks-list">
           <li class="task-item">
@@ -14,11 +23,21 @@
         </ul>
       </div>
       <div class="task-buttons">
-        <ButtonSample>
-          New Task
+        <ButtonSample
+          @click="
+            $router.push(`/main/${currentDay.id}`);
+            store.commit('calendar/setCurrentDate', currentDay)
+            "
+        >
+          Manage Tasks
         </ButtonSample>
         <ButtonSample>
           Clear Tasks
+        </ButtonSample>
+        <ButtonSample
+          @click="setWindowActive(false)"
+        >
+          Close
         </ButtonSample>
       </div>
     </div>
@@ -27,9 +46,23 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
+import { useStore } from 'vuex';
 import CalendarComp from '@/components/calendar/CalendarComp.vue';
 import ButtonSample from '@/components/UI/ButtonSample.vue';
 
+const store = useStore();
+
+const currentDay = ref({});
+const isWindowActive = ref(false);
+
+const setCurrentDay = (data) => {
+  currentDay.value = data;
+};
+
+const setWindowActive = (data) => {
+  isWindowActive.value = data;
+};
 </script>
 
 <style scoped>
@@ -37,6 +70,7 @@ import ButtonSample from '@/components/UI/ButtonSample.vue';
   display: flex;
   flex-direction: column;
   gap: 15px;
+  overflow-y: hidden;
 }
 
 .underline {
@@ -82,5 +116,9 @@ import ButtonSample from '@/components/UI/ButtonSample.vue';
   display: flex;
   flex-direction: column;
   gap: 30px;
+}
+
+.isActive {
+  margin-top: 0;
 }
 </style>

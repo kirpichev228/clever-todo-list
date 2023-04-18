@@ -26,5 +26,6 @@ module.exports = {
     'import/no-cycle': 0,
     'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
     'linebreak-style': 0,
+    'import/no-unresolved': 0,
   },
 };

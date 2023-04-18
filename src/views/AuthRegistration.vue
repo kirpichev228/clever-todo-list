@@ -55,7 +55,6 @@ const setMail = (inputValue) => {
   margin: auto;
   padding: 10px;
   width: 600px;
-  height: 280px;
   border: 2px solid var(--color-static);
   display: flex;
   flex-direction: column;

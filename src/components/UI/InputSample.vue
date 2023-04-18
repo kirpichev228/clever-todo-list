@@ -40,12 +40,11 @@ label:hover {
 
 input {
   width: 80%;
-  height: 35px;
   font-size: 20px;
   background: none;
   border: 1px solid var(--color-static);
   outline: none;
-  padding: 0 10px;
+  padding: 10px 10px;
 }
 
 input:focus {

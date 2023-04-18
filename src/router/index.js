@@ -5,6 +5,7 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 import MainPage from '@/views/MainPage.vue';
 import AuthLogin from '@/views/AuthLogin.vue';
 import AuthRegistration from '@/views/AuthRegistration.vue';
+import TaskPage from '@/views/TaskPage.vue';
 
 const routes = [
   // {
@@ -31,6 +32,14 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: AuthRegistration,
+  },
+  {
+    path: '/main/:id',
+    name: 'TaskPage',
+    component: TaskPage,
+    meta: {
+      requiresAuth: true,
+    },
   },
 ];
 
