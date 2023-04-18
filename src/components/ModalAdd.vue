@@ -8,6 +8,7 @@
         <InputSample
           inputType="text"
           @inputVal="setTask"
+          v-focus
         >
           Enter Task
         </InputSample>
@@ -33,6 +34,7 @@ import { useStore } from 'vuex';
 import { ref } from 'vue';
 import ButtonSample from './UI/ButtonSample.vue';
 import InputSample from './UI/InputSample.vue';
+import VFocus from './directives/VFocus';
 
 const emit = defineEmits(['modalState']);
 

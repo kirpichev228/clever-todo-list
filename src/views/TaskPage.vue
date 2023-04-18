@@ -18,8 +18,17 @@
           You have no tasks for today
         </h3>
         <ul v-else class="task-list">
-          <li v-for="task in storeWatcher" :key="task.task" class="task-item">
-            {{ task.task }}
+          <li
+            v-for="task in storeWatcher"
+            :key="task.task"
+            class="task-item"
+          >
+            <CheckboxSample
+              :labelFor="task.task"
+            >
+              {{ task.task }}
+            </CheckboxSample>
+            <div class="buttons-block"></div>
           </li>
         </ul>
       </div>
@@ -51,6 +60,7 @@ import { useStore } from 'vuex';
 import { computed, ref } from 'vue';
 import ButtonSample from '@/components/UI/ButtonSample.vue';
 import ModalAdd from '@/components/ModalAdd.vue';
+import CheckboxSample from '@/components/UI/CheckboxSample.vue';
 
 const store = useStore();
 const currentDate = store.getters['calendar/currentDate'];
@@ -90,6 +100,11 @@ const clearTasks = () => {
   width: 70%;
   border: 1px solid var(--color-static);
   padding: 10px;
+  overflow-y: scroll;
+}
+
+.tasks-block::-webkit-scrollbar {
+  width: 0;
 }
 
 .task-list {
@@ -102,6 +117,15 @@ const clearTasks = () => {
 .task-item {
   border: 1px solid var(--color-static);
   padding: 10px;
+  word-wrap: break-word;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.input {
+  margin-right: 20px;
 }
 
 .isEmpty {
@@ -124,4 +148,11 @@ const clearTasks = () => {
   flex-direction: column;
   gap: 30px;
 }
+
+.buttons-block {
+  min-width: 100px;
+  height: 30px;
+  border: 1px solid black;
+}
+
 </style>
