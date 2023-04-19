@@ -23,31 +23,26 @@
             :key="task.task"
             class="task-item"
           >
-            <CheckboxSample
-              :labelFor="task.task"
-            >
+            <CheckboxSample :labelFor="task.task">
               {{ task.task }}
             </CheckboxSample>
-            <div class="buttons-block"></div>
+            <div class="buttons-block">
+              <DeleteIcon></DeleteIcon>
+              <EditIcon></EditIcon>
+            </div>
           </li>
         </ul>
       </div>
       <div class="tasks-buttons">
         <div class="task-managment-buttons">
-          <ButtonSample
-            @click="setModalState(true)"
-          >
+          <ButtonSample @click="setModalState(true)">
             New Task
           </ButtonSample>
-          <ButtonSample
-            @click="clearTasks"
-          >
+          <ButtonSample @click="clearTasks">
             Clear Tasks
           </ButtonSample>
         </div>
-        <ButtonSample
-          @click="$router.push('/main')"
-        >
+        <ButtonSample @click="$router.push('/main')">
           Back To Calendar
         </ButtonSample>
       </div>
@@ -61,6 +56,8 @@ import { computed, ref } from 'vue';
 import ButtonSample from '@/components/UI/ButtonSample.vue';
 import ModalAdd from '@/components/ModalAdd.vue';
 import CheckboxSample from '@/components/UI/CheckboxSample.vue';
+import DeleteIcon from '@/icons/DeleteIcon.vue';
+import EditIcon from '@/icons/EditIcon.vue';
 
 const store = useStore();
 const currentDate = store.getters['calendar/currentDate'];
@@ -104,7 +101,19 @@ const clearTasks = () => {
 }
 
 .tasks-block::-webkit-scrollbar {
-  width: 0;
+  width: 7px;
+}
+
+.tasks-block::-webkit-scrollbar-track {
+  background: none;
+}
+
+.tasks-block::-webkit-scrollbar-thumb {
+  background: var(--color-static);
+}
+
+.tasks-block::-webkit-scrollbar-thumb:hover {
+  background: var(--color-hover);
 }
 
 .task-list {
@@ -152,7 +161,10 @@ const clearTasks = () => {
 .buttons-block {
   min-width: 100px;
   height: 30px;
-  border: 1px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
 }
 
 </style>

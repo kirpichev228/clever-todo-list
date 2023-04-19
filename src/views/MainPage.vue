@@ -31,7 +31,7 @@
         >
           Manage Tasks
         </ButtonSample>
-        <ButtonSample>
+        <ButtonSample  @click="getTasks">
           Clear Tasks
         </ButtonSample>
         <ButtonSample
@@ -48,8 +48,10 @@
 <script setup>
 import { ref } from 'vue';
 import { useStore } from 'vuex';
+import { collection, getDocs } from '@firebase/firestore';
 import CalendarComp from '@/components/calendar/CalendarComp.vue';
 import ButtonSample from '@/components/UI/ButtonSample.vue';
+import { db } from '@/firebase/index';
 
 const store = useStore();
 
@@ -62,6 +64,13 @@ const setCurrentDay = (data) => {
 
 const setWindowActive = (data) => {
   isWindowActive.value = data;
+};
+
+const getTasks = async () => {
+  const snapshot = await getDocs(collection(db, 'day-task23'));
+  snapshot.forEach((doc) => {
+    console.log(doc.data());
+  });
 };
 </script>
 

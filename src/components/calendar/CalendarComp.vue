@@ -7,7 +7,6 @@
         :week="day.week"
         :month="day.month"
         @click="
-          fetchData(day.id);
           $emit('pickedDay', {
             id: day.id,
             day: day.day,
@@ -21,9 +20,6 @@
 </template>
 
 <script setup>
-import { useStore } from 'vuex';
-import { getDocs, collection } from 'firebase/firestore';
-import { db } from '@/firebase/index';
 import CalendarItem from '@/components/calendar/CalendarItem.vue';
 
 const monthName = ['Jan', 'Feb', 'March', 'April', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -45,23 +41,6 @@ const arrPush = () => {
       month: monthName[date.getMonth()],
       year: date.getFullYear(),
     });
-  }
-};
-
-const store = useStore();
-
-const fetchData = async (day) => {
-  console.log(store.getters['calendar/currentDay'], '4565');
-  store.commit('calendar/setCurrentDay', 20);
-  console.log(store.getters['calendar/currentDay'], '45');
-  console.log(day);
-  const dela = collection(db, 'day-task');
-  try {
-    const docSnap = await getDocs(dela);
-    const filteredDela = docSnap.docs.map((dock) => ({ ...dock.data(), id: dock.id }));
-    console.log(filteredDela);
-  } catch (e) {
-    console.log(e);
   }
 };
 

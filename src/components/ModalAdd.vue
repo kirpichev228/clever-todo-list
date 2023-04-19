@@ -15,6 +15,7 @@
         <div class="modal-buttons">
           <ButtonSample
             type="submit"
+            @click="pushTask"
           >
             Add Task
           </ButtonSample>
@@ -31,27 +32,44 @@
 
 <script setup>
 import { useStore } from 'vuex';
-import { ref } from 'vue';
+// import { ref } from 'vue';
+import { getDatabase, ref, set } from 'firebase/database';
+import { app, realtimeDB } from '@/firebase/index';
 import ButtonSample from './UI/ButtonSample.vue';
 import InputSample from './UI/InputSample.vue';
+import { auth } from '@/firebase/index';
 import VFocus from './directives/VFocus';
 
 const emit = defineEmits(['modalState']);
 
-const taskForm = ref({
-  task: '',
-  isDone: false,
-});
+// const taskForm = ref({
+//   task: '',
+//   isDone: false,
+// });
 const store = useStore();
 
-const setTask = (inputValue) => {
-  taskForm.value.task = inputValue;
-  // taskForm.value.isDone = false;
+// const setTask = (inputValue) => {
+//   taskForm.value.task = inputValue;
+//   // taskForm.value.isDone = false;
+// };
+console.log(auth.lastNotifiedUid);
+const addTask = () => {
+  // store.commit('calendar/addTask', taskForm.value);
+  emit('modalState', false);
 };
 
-const addTask = () => {
-  store.commit('calendar/addTask', taskForm.value);
-  emit('modalState', false);
+const text = 'kjhk';
+
+const pushTask = async () => {
+  try {
+    await set(ref(realtimeDB, `users/${auth.lastNotifiedUid}/task`), {
+      taskText: text,
+      isDone: false,
+      date: 25,
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 </script>
@@ -65,6 +83,7 @@ const addTask = () => {
   display: flex;
   justify-content: center;
   align-items: center;
+  backdrop-filter: blur(4px);
 }
 
 .modal-window {

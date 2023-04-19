@@ -5,6 +5,7 @@ import router from '@/router';
 export const authStore = {
   state: {
     user: null,
+    userID: null,
   },
   mutations: {
     SET_USER(state, user) {
@@ -12,6 +13,12 @@ export const authStore = {
     },
     CLEAR_USER(state) {
       state.user = null;
+    },
+    setID(state, id) {
+      state.userID = id;
+    },
+    clearID(state) {
+      state.userID = null;
     },
   },
   actions: {
@@ -21,6 +28,7 @@ export const authStore = {
       try {
         await signInWithEmailAndPassword(auth, email, password);
         commit('SET_USER', auth.currentUser);
+        commit('setID', auth.lastNotifiedUid);
         router.push('/main');
       } catch (error) {
         switch (error.code) {
@@ -42,6 +50,7 @@ export const authStore = {
       try {
         await createUserWithEmailAndPassword(auth, email, password);
         commit('SET_USER', auth.currentUser);
+        commit('setID', auth.lastNotifiedUid);
         router.push('/main');
       } catch (error) {
         switch (error.code) {
@@ -66,6 +75,7 @@ export const authStore = {
     async logout({ commit }) {
       await signOut(auth);
       commit('CLEAR_USER');
+      commit('clearID');
       router.push('/login');
     },
 
