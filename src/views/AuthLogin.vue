@@ -37,7 +37,7 @@ const loginForm = ref({});
 const store = useStore();
 
 const login = () => {
-  store.dispatch('login', loginForm.value);
+  store.dispatch('auth/login', loginForm.value);
 };
 
 const setPass = (inputValue) => {

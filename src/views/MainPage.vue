@@ -46,20 +46,21 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref as vueRef, onMounted } from 'vue';
 import { useStore } from 'vuex';
-import { collection, getDocs } from '@firebase/firestore';
+import { ref, onValue } from 'firebase/database';
+import { realtimeDB } from '@/firebase/index';
 import CalendarComp from '@/components/calendar/CalendarComp.vue';
 import ButtonSample from '@/components/UI/ButtonSample.vue';
-import { db } from '@/firebase/index';
 
 const store = useStore();
 
-const currentDay = ref({});
-const isWindowActive = ref(false);
+const currentDay = vueRef({});
+const isWindowActive = vueRef(false);
+const currentUserId = store.getters['auth/userID'];
 
 const setCurrentDay = (data) => {
-  currentDay.value = data;
+  currentDay.value = data.id;
 };
 
 const setWindowActive = (data) => {
@@ -67,11 +68,17 @@ const setWindowActive = (data) => {
 };
 
 const getTasks = async () => {
-  const snapshot = await getDocs(collection(db, 'day-task23'));
-  snapshot.forEach((doc) => {
-    console.log(doc.data());
+  console.log(currentUserId);
+  const taskList = ref(realtimeDB, `users/${currentUserId}`);
+  onValue(taskList, (snapshot) => {
+    console.log(snapshot.val());
   });
 };
+
+onMounted(() => {
+  getTasks();
+});
+
 </script>
 
 <style scoped>

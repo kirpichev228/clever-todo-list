@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <div class="modal-window">
-      <form class="modal-form" @submit.prevent="addTask">
+      <form class="modal-form" @submit.prevent="addNewTask">
         <h2 class="modal-heading">
           New Task
         </h2>
@@ -13,9 +13,9 @@
           Enter Task
         </InputSample>
         <div class="modal-buttons">
+          <LoaderSample style="height: 1px; bottom:20px" v-if="loaderState"/>
           <ButtonSample
             type="submit"
-            @click="pushTask"
           >
             Add Task
           </ButtonSample>
@@ -32,41 +32,37 @@
 
 <script setup>
 import { useStore } from 'vuex';
-// import { ref } from 'vue';
-import { getDatabase, ref, set } from 'firebase/database';
-import { app, realtimeDB } from '@/firebase/index';
+import { ref as vueRef } from 'vue';
+import { ref, set } from 'firebase/database';
+import { realtimeDB } from '@/firebase/index';
+import LoaderSample from '@/components/UI/LoaderSample.vue';
 import ButtonSample from './UI/ButtonSample.vue';
 import InputSample from './UI/InputSample.vue';
-import { auth } from '@/firebase/index';
 import VFocus from './directives/VFocus';
 
 const emit = defineEmits(['modalState']);
 
-// const taskForm = ref({
-//   task: '',
-//   isDone: false,
-// });
+const taskForm = vueRef('');
 const store = useStore();
-
-// const setTask = (inputValue) => {
-//   taskForm.value.task = inputValue;
-//   // taskForm.value.isDone = false;
-// };
-console.log(auth.lastNotifiedUid);
-const addTask = () => {
-  // store.commit('calendar/addTask', taskForm.value);
-  emit('modalState', false);
+const loaderState = vueRef(false);
+const currentUserId = store.getters['auth/userID'];
+console.log(currentUserId);
+const setTask = (inputValue) => {
+  taskForm.value = inputValue;
 };
 
-const text = 'kjhk';
-
-const pushTask = async () => {
+const addNewTask = async () => {
   try {
-    await set(ref(realtimeDB, `users/${auth.lastNotifiedUid}/task`), {
-      taskText: text,
+    loaderState.value = true;
+    await set(ref(realtimeDB, `users/${currentUserId}/${Date.now()}`), {
+      taskText: taskForm.value,
       isDone: false,
-      date: 25,
+      date: store.getters['calendar/currentDate'],
     });
+    store.commit('calendar/addTask', taskForm.value);
+    console.log(store.getters['calendar/currentTasks']);
+    emit('modalState', false);
+    loaderState.value = false;
   } catch (error) {
     console.log(error);
   }

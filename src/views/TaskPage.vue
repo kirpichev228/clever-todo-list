@@ -24,7 +24,7 @@
             class="task-item"
           >
             <CheckboxSample :labelFor="task.task">
-              {{ task.task }}
+              {{ task }}
             </CheckboxSample>
             <div class="buttons-block">
               <DeleteIcon></DeleteIcon>

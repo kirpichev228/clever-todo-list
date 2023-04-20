@@ -1,5 +1,6 @@
-import { createRouter, createWebHashHistory } from 'vue-router';
-// import { auth } from '@/firebase';
+import { createRouter, createWebHistory } from 'vue-router';
+import { auth } from '@/firebase';
+import store from '@/store';
 
 // import App from '@/App.vue';
 import MainPage from '@/views/MainPage.vue';
@@ -44,22 +45,26 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes,
 });
 
-// router.beforeEach((to, from, next) => {
-//   if (to.path === '/login' && auth.currentUser) {
-//     next('/main');
-//     return;
-//   }
+router.beforeEach(async (to, from, next) => {
+  await store.dispatch('auth/fetchUser');
+  if (to.path === '/login' && auth.currentUser) {
+    next('/main');
+    return;
+  }
 
-//   if (to.matched.some((record) => record.meta.requiresAuth) && !auth.currentUser) {
-//     next('/login');
-//     return;
-//   }
-
-//   next();
-// });
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    const user = store.dispatch('auth/fetchUser');
+    console.log(user);
+    if (user) {
+      next();
+    } else {
+      next('/login');
+    }
+  } else next();
+});
 
 export default router;

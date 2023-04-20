@@ -15,7 +15,8 @@ import Navbar from './components/NavBar.vue';
 const store = useStore();
 
 onBeforeMount(() => {
-  store.dispatch('fetchUser');
+  store.dispatch('auth/fetchUser');
+  store.dispatch('auth/setUser');
 });
 
 </script>

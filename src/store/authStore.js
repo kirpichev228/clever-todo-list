@@ -1,5 +1,10 @@
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
-import { auth } from '@/firebase';
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+} from 'firebase/auth';
+import { auth } from '@/firebase/index';
 import router from '@/router';
 
 export const authStore = {
@@ -19,6 +24,14 @@ export const authStore = {
     },
     clearID(state) {
       state.userID = null;
+    },
+  },
+  getters: {
+    user(state) {
+      return state.user;
+    },
+    userID(state) {
+      return state.userID;
     },
   },
   actions: {
@@ -79,19 +92,46 @@ export const authStore = {
       router.push('/login');
     },
 
-    fetchUser({ commit }) {
+    async fetchUser() {
+      // auth.onAuthStateChanged(async (user) => {
+      //   if (user === null) {
+      //     commit('CLEAR_USER');
+      //   } else {
+      //     commit('SET_USER', user);
+
+      //     if (router.isReady() && router.currentRoute.value.path === 'login') {
+      //       router.push('/main');
+      //     }
+      //   }
+      // });
+
+      return new Promise((resolve, reject) => {
+        const unsubscribe = onAuthStateChanged(
+          auth,
+          (user) => {
+            unsubscribe();
+            resolve(user);
+          },
+          reject,
+        );
+      });
+    },
+
+    async setUser({ commit }) {
       auth.onAuthStateChanged(async (user) => {
         if (user === null) {
           commit('CLEAR_USER');
+          commit('clearID');
         } else {
           commit('SET_USER', user);
+          commit('setID', user.uid);
 
-          if (router.isReady() && router.currentRoute.value.path === 'login') {
-            router.push('/main');
-          }
+          // if (router.isReady() && router.currentRoute.value.path === 'login') {
+          //   router.push('/main');
+          // }
         }
       });
     },
   },
-  namespaces: true,
+  namespaced: true,
 };

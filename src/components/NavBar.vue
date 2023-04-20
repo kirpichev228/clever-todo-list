@@ -3,10 +3,10 @@
     <h1 class="heading">
       Clever ToDo
     </h1>
-    <div class="nav-buttons" v-if="$store.state.auth.user">
-      <span class="current-user"> {{ $store.state.auth.user.email }} </span>
+    <div class="nav-buttons" v-if="storeWatcher">
+      <span class="current-user"> {{ storeWatcher.email }} </span>
       <ButtonSample
-        @click="$store.dispatch('logout')"
+        @click="$store.dispatch('auth/logout')"
       >
         Log Out
       </ButtonSample>
@@ -15,7 +15,13 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
+import { useStore } from 'vuex';
 import ButtonSample from './UI/ButtonSample.vue';
+
+const store = useStore();
+
+const storeWatcher = computed(() => store.getters['auth/user']);
 
 </script>
 

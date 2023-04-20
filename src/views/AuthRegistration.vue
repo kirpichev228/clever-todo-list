@@ -37,7 +37,7 @@ const registerForm = ref({});
 const store = useStore();
 
 const register = () => {
-  store.dispatch('register', registerForm.value);
+  store.dispatch('auth/register', registerForm.value);
 };
 
 const setPass = (inputValue) => {
