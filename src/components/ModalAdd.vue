@@ -54,10 +54,12 @@ const setTask = (inputValue) => {
 const addNewTask = async () => {
   try {
     loaderState.value = true;
-    await set(ref(realtimeDB, `users/${currentUserId}/${Date.now()}`), {
+    const taskID = Date.now();
+    await set(ref(realtimeDB, `users/${currentUserId}/${taskID}`), {
+      id: taskID,
       taskText: taskForm.value,
       isDone: false,
-      date: store.getters['calendar/currentDate'],
+      date: store.getters['calendar/currentDate'].id,
     });
     store.commit('calendar/addTask', taskForm.value);
     console.log(store.getters['calendar/currentTasks']);

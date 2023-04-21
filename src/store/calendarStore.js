@@ -8,6 +8,9 @@ export const calendarStore = {
     setCurrentDate(state, data) {
       state.currentDate = data;
     },
+    setCurrentTasks(state, data) {
+      state.currentTasks = data;
+    },
     addTask(state, data) {
       state.currentTasks.push(data);
     },
@@ -18,6 +21,9 @@ export const calendarStore = {
   actions: {
     setCurrentDate({ commit }, data) {
       commit('setCurrentDay', data);
+    },
+    setCurrentTasks({ commit }, data) {
+      commit('setCurrentTasks', data);
     },
     addTask({ commit }, data) {
       commit('addTask', data);

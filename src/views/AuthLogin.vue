@@ -6,6 +6,7 @@
         <InputSample
           inputType="email"
           @inputVal="setMail"
+          v-focus
         >
           Email
         </InputSample>
@@ -30,6 +31,7 @@
 <script setup>
 import { useStore } from 'vuex';
 import { ref } from 'vue';
+import VFocus from '@/components/directives/VFocus';
 import ButtonSample from '../components/UI/ButtonSample.vue';
 import InputSample from '../components/UI/InputSample.vue';
 

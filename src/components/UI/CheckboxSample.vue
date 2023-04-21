@@ -5,6 +5,8 @@
       :name="labelFor"
       :id="labelFor"
       class="input"
+      @change="$emit('checkboxChange', $event.target.checked)"
+      :checked="isDone"
     >
     <span class="checkmark"></span>
     <slot></slot>
@@ -12,9 +14,12 @@
 </template>
 
 <script setup>
+
 defineProps({
   labelFor: String,
+  isDone: Boolean,
 });
+
 </script>
 
 <style scoped>
@@ -22,6 +27,7 @@ defineProps({
   cursor: pointer;
   display: flex;
   gap: 10px;
+  overflow-wrap: anywhere;
 }
 
 .custom-checkbox input[type="checkbox"] {

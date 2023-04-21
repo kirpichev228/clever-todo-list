@@ -23,8 +23,11 @@
             :key="task.task"
             class="task-item"
           >
-            <CheckboxSample :labelFor="task.task">
-              {{ task }}
+            <CheckboxSample
+              :iDsone="task.isDone"
+              :labelFor="task.task"
+            >
+              {{ task.taskText }}
             </CheckboxSample>
             <div class="buttons-block">
               <DeleteIcon></DeleteIcon>
