@@ -60,7 +60,7 @@ const isWindowActive = vueRef(false);
 const currentUserId = store.getters['auth/userID'];
 
 const setCurrentDay = (data) => {
-  currentDay.value = data.id;
+  currentDay.value = data;
 };
 
 const setWindowActive = (data) => {
