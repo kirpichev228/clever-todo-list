@@ -4,6 +4,7 @@ export const calendarStore = {
     currentDate: {},
     currentTasks: [],
     loaderStatus: false,
+    allTasks: [],
   },
   mutations: {
     setCurrentDate(state, data) {
@@ -11,6 +12,9 @@ export const calendarStore = {
     },
     setCurrentTasks(state, data) {
       state.currentTasks = data;
+    },
+    setAllTasks(state, data) {
+      state.allTasks = data;
     },
     addTask(state, data) {
       state.currentTasks.push(data);
@@ -21,8 +25,8 @@ export const calendarStore = {
     deleteTask(state, data) {
       state.currentTasks = state.currentTasks.filter((task) => task.id !== data);
     },
-    editTask(state, data, index) {
-      state.currentTasks[index].taskText = data;
+    editTask(state, data) {
+      state.currentTasks[data.taskIndex].taskText = data.taskText;
     },
     changeLoaderStatus(state, data) {
       state.loaderStatus = data;
@@ -37,6 +41,9 @@ export const calendarStore = {
     },
     setCurrentTasks({ commit }, data) {
       commit('setCurrentTasks', data);
+    },
+    setAllTasks({ commit }, data) {
+      commit('setAllTasks', data);
     },
     addTask({ commit }, data) {
       commit('addTask', data);
@@ -63,6 +70,9 @@ export const calendarStore = {
     },
     currentTasks(state) {
       return state.currentTasks;
+    },
+    allTasks(state) {
+      return state.allTasks;
     },
     loaderStatus(state) {
       return state.loaderStatus;

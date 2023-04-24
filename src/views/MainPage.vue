@@ -81,8 +81,7 @@ const setWindowActive = (data) => {
 };
 
 const setCurrentTasks = () => {
-  currentDay.value.tasks = [...taskList.value]
-    .filter((el) => el.date === currentDay.value.id);
+  currentDay.value.tasks = taskList.value.filter((el) => el.date === currentDay.value.id);
   store.commit('calendar/setCurrentTasks', currentDay.value.tasks);
 };
 
@@ -92,6 +91,8 @@ const getTasks = async () => {
   onValue(taskListFromServer, (snapshot) => {
     if (snapshot.val() !== null) {
       taskList.value = Object.values(snapshot.val());
+      console.log(taskList.value);
+      store.commit('calendar/setAllTasks', taskList.value);
     }
   });
   store.commit('calendar/changeLoaderStatus', false);
@@ -115,6 +116,7 @@ const redirectToDayPage = () => {
 
 const clearTasks = async () => {
   store.commit('calendar/changeLoaderStatus', true);
+
   const tasksToRemove = taskList.value.filter((task) => task.date === currentDay.value.id);
   const updates = tasksToRemove.reduce((acc, task) => {
     acc[`users/${currentUserId}/${task.id}`] = null;

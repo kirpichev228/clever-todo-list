@@ -64,7 +64,7 @@
 <script setup>
 import { useStore } from 'vuex';
 import { computed, reactive } from 'vue';
-import { ref as firebaseRef, remove } from 'firebase/database';
+import { ref as firebaseRef, remove, update } from 'firebase/database';
 import { realtimeDB } from '@/firebase/index';
 import ButtonSample from '@/components/UI/ButtonSample.vue';
 import ModalAdd from '@/components/modals/ModalAdd.vue';
@@ -85,7 +85,10 @@ const choosedTask = reactive({
 });
 
 const currentDate = store.getters['calendar/currentDate'];
+console.log(currentDate);
 const currentUserId = store.getters['auth/userID'];
+const allTasks = store.getters['calendar/allTasks'];
+console.log(allTasks);
 
 const storeObserver = computed(() => store.getters['calendar/currentTasks']);
 
@@ -98,7 +101,21 @@ const setModalEditState = (data) => {
 };
 
 const clearTasks = async () => {
-  store.commit('calendar/clearTasks');
+  store.commit('calendar/changeLoaderStatus', true);
+
+  const tasksToremove = allTasks.filter((task) => task.date === currentDate.id);
+  const updates = tasksToremove.reduce((acc, task) => {
+    acc[`users/${currentUserId}/${task.id}`] = null;
+    return acc;
+  }, {});
+
+  try {
+    await update(firebaseRef(realtimeDB), updates);
+    store.commit('calendar/clearTasks');
+    store.commit('calendar/changeLoaderStatus', false);
+  } catch (error) {
+    alert(error);
+  }
 };
 
 const deleteTask = async (task) => {
