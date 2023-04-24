@@ -1,13 +1,13 @@
 <template>
   <ModalAdd
-    v-if="modalAddState"
+    v-if="modalState.add"
     @modalAddState="setModalAddState"
   />
   <ModalEdit
-    v-if="modalEditState"
+    v-if="modalState.edit"
     @modalEditState="setModalEditState"
-    :currentTask="choosedTaskText"
-    :currentId="choosedTaskId"
+    :currentTask="choosedTask.text"
+    :currentId="choosedTask.id"
   />
   <div class="wrapper">
     <h2 class="heading">
@@ -63,7 +63,7 @@
 
 <script setup>
 import { useStore } from 'vuex';
-import { computed, ref } from 'vue';
+import { computed, reactive } from 'vue';
 import { ref as firebaseRef, remove } from 'firebase/database';
 import { realtimeDB } from '@/firebase/index';
 import ButtonSample from '@/components/UI/ButtonSample.vue';
@@ -74,21 +74,27 @@ import DeleteIcon from '@/icons/DeleteIcon.vue';
 import EditIcon from '@/icons/EditIcon.vue';
 
 const store = useStore();
+
+const modalState = reactive({
+  add: false,
+  edit: false,
+});
+const choosedTask = reactive({
+  text: '',
+  id: NaN,
+});
+
 const currentDate = store.getters['calendar/currentDate'];
-const modalAddState = ref(false);
-const modalEditState = ref(false);
-const choosedTaskText = ref('');
-const choosedTaskId = ref(NaN);
 const currentUserId = store.getters['auth/userID'];
 
 const storeObserver = computed(() => store.getters['calendar/currentTasks']);
 
 const setModalAddState = (data) => {
-  modalAddState.value = data;
+  modalState.add = data;
 };
 
 const setModalEditState = (data) => {
-  modalEditState.value = data;
+  modalState.edit = data;
 };
 
 const clearTasks = async () => {
@@ -108,8 +114,8 @@ const deleteTask = async (task) => {
 
 const editTask = async (index) => {
   // console.log(index);
-  choosedTaskText.value = storeObserver.value[index].taskText;
-  choosedTaskId.value = storeObserver.value[index].id;
+  choosedTask.text = storeObserver.value[index].taskText;
+  choosedTask.id = storeObserver.value[index].id;
   setModalEditState(true);
 };
   // { date: 1680296400000,

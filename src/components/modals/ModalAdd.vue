@@ -62,6 +62,7 @@ const addNewTask = async () => {
       date: store.getters['calendar/currentDate'].id,
     });
     store.commit('calendar/addTask', taskForm.value);
+    console.log(taskForm.value);
     emit('modalAddState', false);
     store.commit('calendar/changeLoaderStatus', false);
   } catch (error) {

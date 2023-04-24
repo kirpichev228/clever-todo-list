@@ -20,13 +20,15 @@ export const calendarStore = {
     },
     deleteTask(state, data) {
       state.currentTasks = state.currentTasks.filter((task) => task.id !== data);
-      console.log(state.currentTasks);
     },
     editTask(state, data, index) {
       state.currentTasks[index].taskText = data;
     },
     changeLoaderStatus(state, data) {
       state.loaderStatus = data;
+    },
+    changeTaskStatus(state, data) {
+      state.currentTasks[data.taskIndex].isDone = data.taskStatus;
     },
   },
   actions: {
@@ -50,6 +52,9 @@ export const calendarStore = {
     },
     changeLoaderStatus({ commit }, data) {
       commit('changeLoaderStatus', data);
+    },
+    changeTaskStatus({ commit }, data) {
+      commit('changeTaskStatus', data);
     },
   },
   getters: {

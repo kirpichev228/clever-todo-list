@@ -19,12 +19,12 @@
         </h2>
         <ul class="tasks-list" v-if="currentDay.tasks.length !== 0">
           <li class="task-item"
-            v-for="task in currentDay.tasks" :key="task.id"
+            v-for="(task, index) in currentDay.tasks" :key="task.id"
           >
             <CheckboxSample
               :labelFor="task.id"
               :isDone="task.isDone"
-              @checkboxChange="(data) => changeTaskStatus(data, task.id)"
+              @checkboxChange="(data) => changeTaskStatus(data, task.id, index)"
             >
               {{ task.taskText }}
             </CheckboxSample>
@@ -97,13 +97,14 @@ const getTasks = async () => {
   store.commit('calendar/changeLoaderStatus', false);
 };
 
-const changeTaskStatus = async (taskStatus, taskId) => {
+const changeTaskStatus = async (taskStatus, taskId, taskIndex) => {
   try {
     store.commit('calendar/changeLoaderStatus', true);
     await set(firebaseRef(realtimeDB, `users/${currentUserId}/${taskId}/isDone`), taskStatus);
+    store.commit('calendar/changeTaskStatus', { taskStatus, taskIndex });
     store.commit('calendar/changeLoaderStatus', false);
   } catch (error) {
-    alert(error);
+    console.log(error);
   }
 };
 
