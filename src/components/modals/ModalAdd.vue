@@ -13,14 +13,14 @@
           Enter Task
         </InputSample>
         <div class="modal-buttons">
-          <LoaderSample style="height: 1px; bottom:20px" v-if="loaderState"/>
+          <LoaderSample style="height: 1px; bottom:20px" v-if="loaderObserver"/>
           <ButtonSample
             type="submit"
           >
             Add Task
           </ButtonSample>
           <ButtonSample
-            @click="$emit('modalState', false)"
+            @click="$emit('modalAddState', false)"
           >
             Cancel
           </ButtonSample>
@@ -32,28 +32,28 @@
 
 <script setup>
 import { useStore } from 'vuex';
-import { ref as vueRef } from 'vue';
+import { computed, ref as vueRef } from 'vue';
 import { ref, set } from 'firebase/database';
 import { realtimeDB } from '@/firebase/index';
 import LoaderSample from '@/components/UI/LoaderSample.vue';
-import ButtonSample from './UI/ButtonSample.vue';
-import InputSample from './UI/InputSample.vue';
-import VFocus from './directives/VFocus';
+import VFocus from '@/components/directives/VFocus';
+import ButtonSample from '@/components/UI/ButtonSample.vue';
+import InputSample from '@/components/UI/InputSample.vue';
 
-const emit = defineEmits(['modalState']);
+const emit = defineEmits(['modalAddState']);
 
 const taskForm = vueRef('');
 const store = useStore();
-const loaderState = vueRef(false);
+
 const currentUserId = store.getters['auth/userID'];
-console.log(currentUserId);
+const loaderObserver = computed(() => store.getters['calendar/loaderStatus']);
 const setTask = (inputValue) => {
   taskForm.value = inputValue;
 };
 
 const addNewTask = async () => {
   try {
-    loaderState.value = true;
+    store.commit('calendar/changeLoaderStatus', true);
     const taskID = Date.now();
     await set(ref(realtimeDB, `users/${currentUserId}/${taskID}`), {
       id: taskID,
@@ -62,11 +62,10 @@ const addNewTask = async () => {
       date: store.getters['calendar/currentDate'].id,
     });
     store.commit('calendar/addTask', taskForm.value);
-    console.log(store.getters['calendar/currentTasks']);
-    emit('modalState', false);
-    loaderState.value = false;
+    emit('modalAddState', false);
+    store.commit('calendar/changeLoaderStatus', false);
   } catch (error) {
-    console.log(error);
+    alert(error);
   }
 };
 

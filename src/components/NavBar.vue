@@ -3,8 +3,9 @@
     <h1 class="heading">
       Clever ToDo
     </h1>
-    <div class="nav-buttons" v-if="storeWatcher">
-      <span class="current-user"> {{ storeWatcher.email }} </span>
+    <div class="nav-buttons" v-if="storeObserver">
+      <LoaderSample v-if="loaderObserver"/>
+      <span class="current-user"> {{ storeObserver.email }} </span>
       <ButtonSample
         @click="$store.dispatch('auth/logout')"
       >
@@ -17,11 +18,13 @@
 <script setup>
 import { computed } from 'vue';
 import { useStore } from 'vuex';
+import LoaderSample from '@/components/UI/LoaderSample.vue';
 import ButtonSample from './UI/ButtonSample.vue';
 
 const store = useStore();
 
-const storeWatcher = computed(() => store.getters['auth/user']);
+const loaderObserver = computed(() => store.getters['calendar/loaderStatus']);
+const storeObserver = computed(() => store.getters['auth/user']);
 
 </script>
 

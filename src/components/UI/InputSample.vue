@@ -9,6 +9,7 @@
       :id="inputType"
       :placeholder="inputType"
       @change="$emit('inputVal', $event.target.value)"
+      :value="inputValue"
     >
   </label>
 </template>
@@ -18,6 +19,7 @@ import { defineProps } from 'vue';
 
 defineProps({
   inputType: String,
+  inputValue: String,
 });
 defineEmits([
   'inputVal',

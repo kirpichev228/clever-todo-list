@@ -19,10 +19,10 @@
         </h2>
         <ul class="tasks-list" v-if="currentDay.tasks.length !== 0">
           <li class="task-item"
-            v-for="task in currentDay.tasks" :key="task"
+            v-for="task in currentDay.tasks" :key="task.id"
           >
             <CheckboxSample
-              :labelFor="task.taskText"
+              :labelFor="task.id"
               :isDone="task.isDone"
               @checkboxChange="(data) => changeTaskStatus(data, task.id)"
             >
@@ -34,14 +34,11 @@
       </div>
       <div class="task-buttons">
         <ButtonSample
-          @click="
-            $router.push(`/main/${currentDay.id}`);
-            store.commit('calendar/setCurrentDate', currentDay)
-            "
+          @click="redirectToDayPage"
         >
           Manage Tasks
         </ButtonSample>
-        <ButtonSample  @click="getTasks">
+        <ButtonSample  @click="clearTasks">
           Clear Tasks
         </ButtonSample>
         <ButtonSample
@@ -56,19 +53,23 @@
 </template>
 
 <script setup>
-import { ref as vueRef, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useStore } from 'vuex';
-import { ref, onValue, set } from 'firebase/database';
+import {
+  ref as firebaseRef, onValue, set, update,
+} from 'firebase/database';
 import { realtimeDB } from '@/firebase/index';
+import router from '@/router';
 import CalendarComp from '@/components/calendar/CalendarComp.vue';
 import ButtonSample from '@/components/UI/ButtonSample.vue';
 import CheckboxSample from '@/components/UI/CheckboxSample.vue';
 
 const store = useStore();
 
-const currentDay = vueRef({});
-const isWindowActive = vueRef(false);
-const taskList = vueRef([]);
+const currentDay = ref({});
+const isWindowActive = ref(false);
+const taskList = ref([]);
+
 const currentUserId = store.getters['auth/userID'];
 
 const setCurrentDay = (data) => {
@@ -86,17 +87,45 @@ const setCurrentTasks = () => {
 };
 
 const getTasks = async () => {
-  const taskListFromServer = ref(realtimeDB, `users/${currentUserId}`);
+  store.commit('calendar/changeLoaderStatus', true);
+  const taskListFromServer = firebaseRef(realtimeDB, `users/${currentUserId}`);
   onValue(taskListFromServer, (snapshot) => {
     if (snapshot.val() !== null) {
       taskList.value = Object.values(snapshot.val());
     }
   });
+  store.commit('calendar/changeLoaderStatus', false);
 };
 
 const changeTaskStatus = async (taskStatus, taskId) => {
   try {
-    await set(ref(realtimeDB, `users/${currentUserId}/${taskId}/isDone`), taskStatus);
+    store.commit('calendar/changeLoaderStatus', true);
+    await set(firebaseRef(realtimeDB, `users/${currentUserId}/${taskId}/isDone`), taskStatus);
+    store.commit('calendar/changeLoaderStatus', false);
+  } catch (error) {
+    alert(error);
+  }
+};
+
+const redirectToDayPage = () => {
+  router.push(`/main/${currentDay.value.id}`);
+  store.commit('calendar/setCurrentDate', currentDay);
+};
+
+const clearTasks = async () => {
+  store.commit('calendar/changeLoaderStatus', true);
+  const tasksToRemove = taskList.value.filter((task) => task.date === currentDay.value.id);
+  const updates = tasksToRemove.reduce((acc, task) => {
+    acc[`users/${currentUserId}/${task.id}`] = null;
+    return acc;
+  }, {});
+
+  try {
+    await update(firebaseRef(realtimeDB), updates);
+    taskList.value = taskList.value.filter((task) => task.date !== currentDay.value.id);
+    currentDay.value.tasks = [];
+    store.commit('calendar/setCurrentTasks', []);
+    store.commit('calendar/changeLoaderStatus', false);
   } catch (error) {
     alert(error);
   }

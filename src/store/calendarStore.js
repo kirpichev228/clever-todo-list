@@ -3,6 +3,7 @@ export const calendarStore = {
   state: {
     currentDate: {},
     currentTasks: [],
+    loaderStatus: false,
   },
   mutations: {
     setCurrentDate(state, data) {
@@ -16,6 +17,16 @@ export const calendarStore = {
     },
     clearTasks(state) {
       state.currentTasks = [];
+    },
+    deleteTask(state, data) {
+      state.currentTasks = state.currentTasks.filter((task) => task.id !== data);
+      console.log(state.currentTasks);
+    },
+    editTask(state, data, index) {
+      state.currentTasks[index].taskText = data;
+    },
+    changeLoaderStatus(state, data) {
+      state.loaderStatus = data;
     },
   },
   actions: {
@@ -31,6 +42,15 @@ export const calendarStore = {
     clearTasks({ commit }) {
       commit('clearTasks');
     },
+    deleteTask({ commit }, data) {
+      commit('deleteTask', data);
+    },
+    editTask({ commit }, data, index) {
+      commit('editTask', data, index);
+    },
+    changeLoaderStatus({ commit }, data) {
+      commit('changeLoaderStatus', data);
+    },
   },
   getters: {
     currentDate(state) {
@@ -38,6 +58,9 @@ export const calendarStore = {
     },
     currentTasks(state) {
       return state.currentTasks;
+    },
+    loaderStatus(state) {
+      return state.loaderStatus;
     },
   },
 };

@@ -9,13 +9,11 @@ import AuthRegistration from '@/views/AuthRegistration.vue';
 import TaskPage from '@/views/TaskPage.vue';
 
 const routes = [
-  // {
-  //   path: '/',
-  //   component: App,
-  //   meta: {
-  //     requiresAuth: true,
-  //   },
-  // },
+  {
+    path: '/',
+    // name: 'Login',
+    component: AuthLogin,
+  },
   {
     path: '/main',
     name: 'Main',
@@ -51,7 +49,7 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   await store.dispatch('auth/fetchUser');
-  if (to.path === '/login' && auth.currentUser) {
+  if ((to.path === '/login' || to.path === '/') && auth.currentUser) {
     next('/main');
     return;
   }
