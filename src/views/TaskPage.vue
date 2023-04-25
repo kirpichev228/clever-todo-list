@@ -8,6 +8,7 @@
     @modalEditState="setModalEditState"
     :currentTask="choosedTask.text"
     :currentId="choosedTask.id"
+    :currentIndex="choosedTask.index"
   />
   <div class="wrapper">
     <h2 class="heading">
@@ -89,6 +90,7 @@ const modalState = reactive({
 const choosedTask = reactive({
   text: '',
   id: NaN,
+  index: NaN,
 });
 
 const currentDate = store.getters['calendar/currentDate'];
@@ -121,12 +123,9 @@ const deleteTask = async (task) => {
 const editTask = async (index) => {
   choosedTask.text = currentTasksObserver.value[index].taskText;
   choosedTask.id = currentTasksObserver.value[index].id;
+  choosedTask.index = index;
   setModalEditState(true);
 };
-  // { date: 1680296400000,
-// id: 1682324102438,
-// isDone: true,
-// taskText: 'Деланье делов' }
 
 </script>
 

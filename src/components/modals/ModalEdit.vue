@@ -46,6 +46,7 @@ const emit = defineEmits(['modalEditState']);
 const props = defineProps({
   currentTask: String,
   currentId: Number,
+  currentIndex: Number,
 });
 
 const taskForm = ref('');
@@ -61,7 +62,10 @@ const editTask = async () => {
   try {
     store.commit('calendar/changeLoaderStatus', true);
     await set(firbaseRef(realtimeDB, `users/${currentUserId}/${props.currentId}/taskText`), taskForm.value);
-    // store.commit('calendar/addTask', taskForm.value);
+    store.commit('calendar/editTask', {
+      taskIndex: props.currentIndex,
+      taskText: taskForm.value,
+    });
     emit('modalEditState', false);
     store.commit('calendar/changeLoaderStatus', false);
   } catch (error) {

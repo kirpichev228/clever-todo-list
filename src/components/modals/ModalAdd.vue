@@ -47,6 +47,7 @@ const store = useStore();
 
 const currentUserId = store.getters['auth/userID'];
 const loaderObserver = computed(() => store.getters['calendar/loaderStatus']);
+
 const setTask = (inputValue) => {
   taskForm.value = inputValue;
 };
