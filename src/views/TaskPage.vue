@@ -19,19 +19,20 @@
     <div class="task-wrapper">
       <div
         class="tasks-block"
-        :class="{ 'isEmpty': storeObserver.length === 0 }">
-        <h3 v-if="storeObserver.length === 0">
+        :class="{ 'isEmpty': currentTasksObserver.length === 0 }">
+        <h3 v-if="currentTasksObserver.length === 0">
           You have no tasks for today
         </h3>
         <ul v-else class="task-list">
           <li
-            v-for="(task, index) in storeObserver"
+            v-for="(task, index) in currentTasksObserver"
             :key="task.task"
             class="task-item"
           >
             <CheckboxSample
               :isDone="task.isDone"
-              :labelFor="task.task"
+              :labelFor="task.taskText"
+              @checkboxChange="(data) => useTaskStatus(data, task.id, index, currentUserId)"
             >
               {{ task.taskText }}
             </CheckboxSample>
@@ -49,7 +50,9 @@
           <ButtonSample @click="setModalAddState(true)">
             New Task
           </ButtonSample>
-          <ButtonSample @click="clearTasks">
+          <ButtonSample
+            @click="useClearTasks(tasksToRemove, currentUserId, realtimeDB)"
+          >
             Clear Tasks
           </ButtonSample>
         </div>
@@ -64,7 +67,9 @@
 <script setup>
 import { useStore } from 'vuex';
 import { computed, reactive } from 'vue';
-import { ref as firebaseRef, remove, update } from 'firebase/database';
+import {
+  ref as firebaseRef, remove,
+} from 'firebase/database';
 import { realtimeDB } from '@/firebase/index';
 import ButtonSample from '@/components/UI/ButtonSample.vue';
 import ModalAdd from '@/components/modals/ModalAdd.vue';
@@ -72,6 +77,8 @@ import ModalEdit from '@/components/modals/ModalEdit.vue';
 import CheckboxSample from '@/components/UI/CheckboxSample.vue';
 import DeleteIcon from '@/icons/DeleteIcon.vue';
 import EditIcon from '@/icons/EditIcon.vue';
+import { useTaskStatus } from '@/composables/useTaskStatus';
+import { useClearTasks } from '@/composables/useClearTasks';
 
 const store = useStore();
 
@@ -85,12 +92,10 @@ const choosedTask = reactive({
 });
 
 const currentDate = store.getters['calendar/currentDate'];
-console.log(currentDate);
 const currentUserId = store.getters['auth/userID'];
-const allTasks = store.getters['calendar/allTasks'];
-console.log(allTasks);
 
-const storeObserver = computed(() => store.getters['calendar/currentTasks']);
+const taskListObserver = computed(() => store.getters['calendar/allTasks']);
+const currentTasksObserver = computed(() => store.getters['calendar/currentTasks']);
 
 const setModalAddState = (data) => {
   modalState.add = data;
@@ -100,23 +105,7 @@ const setModalEditState = (data) => {
   modalState.edit = data;
 };
 
-const clearTasks = async () => {
-  store.commit('calendar/changeLoaderStatus', true);
-
-  const tasksToremove = allTasks.filter((task) => task.date === currentDate.id);
-  const updates = tasksToremove.reduce((acc, task) => {
-    acc[`users/${currentUserId}/${task.id}`] = null;
-    return acc;
-  }, {});
-
-  try {
-    await update(firebaseRef(realtimeDB), updates);
-    store.commit('calendar/clearTasks');
-    store.commit('calendar/changeLoaderStatus', false);
-  } catch (error) {
-    alert(error);
-  }
-};
+const tasksToRemove = taskListObserver.value.filter((task) => task.date === currentDate.id);
 
 const deleteTask = async (task) => {
   try {
@@ -130,9 +119,8 @@ const deleteTask = async (task) => {
 };
 
 const editTask = async (index) => {
-  // console.log(index);
-  choosedTask.text = storeObserver.value[index].taskText;
-  choosedTask.id = storeObserver.value[index].id;
+  choosedTask.text = currentTasksObserver.value[index].taskText;
+  choosedTask.id = currentTasksObserver.value[index].id;
   setModalEditState(true);
 };
   // { date: 1680296400000,

@@ -17,14 +17,14 @@
           {{ currentDay.month }}
           {{ currentDay.year }}
         </h2>
-        <ul class="tasks-list" v-if="currentDay.tasks.length !== 0">
+        <ul class="tasks-list" v-if="currentTasksObserver.length !== 0">
           <li class="task-item"
-            v-for="(task, index) in currentDay.tasks" :key="task.id"
+            v-for="(task, index) in currentTasksObserver" :key="task.id"
           >
             <CheckboxSample
               :labelFor="task.id"
               :isDone="task.isDone"
-              @checkboxChange="(data) => changeTaskStatus(data, task.id, index)"
+              @checkboxChange="(data) => useTaskStatus(data, task.id, index, currentUserId)"
             >
               {{ task.taskText }}
             </CheckboxSample>
@@ -38,7 +38,9 @@
         >
           Manage Tasks
         </ButtonSample>
-        <ButtonSample  @click="clearTasks">
+        <ButtonSample
+          @click="useClearTasks(tasksToRemove(), currentUserId, realtimeDB)"
+        >
           Clear Tasks
         </ButtonSample>
         <ButtonSample
@@ -53,24 +55,26 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useStore } from 'vuex';
-import {
-  ref as firebaseRef, onValue, set, update,
-} from 'firebase/database';
+import { ref as firebaseRef, onValue } from 'firebase/database';
 import { realtimeDB } from '@/firebase/index';
 import router from '@/router';
 import CalendarComp from '@/components/calendar/CalendarComp.vue';
 import ButtonSample from '@/components/UI/ButtonSample.vue';
 import CheckboxSample from '@/components/UI/CheckboxSample.vue';
+import { useTaskStatus } from '@/composables/useTaskStatus';
+import { useClearTasks } from '@/composables/useClearTasks';
 
 const store = useStore();
 
 const currentDay = ref({});
 const isWindowActive = ref(false);
-const taskList = ref([]);
 
 const currentUserId = store.getters['auth/userID'];
+
+const taskListObserver = computed(() => store.getters['calendar/allTasks']);
+const currentTasksObserver = computed(() => store.getters['calendar/currentTasks']);
 
 const setCurrentDay = (data) => {
   currentDay.value = data;
@@ -81,8 +85,7 @@ const setWindowActive = (data) => {
 };
 
 const setCurrentTasks = () => {
-  currentDay.value.tasks = taskList.value.filter((el) => el.date === currentDay.value.id);
-  store.commit('calendar/setCurrentTasks', currentDay.value.tasks);
+  store.commit('calendar/setCurrentTasks', taskListObserver.value.filter((el) => el.date === currentDay.value.id));
 };
 
 const getTasks = async () => {
@@ -90,23 +93,10 @@ const getTasks = async () => {
   const taskListFromServer = firebaseRef(realtimeDB, `users/${currentUserId}`);
   onValue(taskListFromServer, (snapshot) => {
     if (snapshot.val() !== null) {
-      taskList.value = Object.values(snapshot.val());
-      console.log(taskList.value);
-      store.commit('calendar/setAllTasks', taskList.value);
+      store.commit('calendar/setAllTasks', Object.values(snapshot.val()));
     }
   });
   store.commit('calendar/changeLoaderStatus', false);
-};
-
-const changeTaskStatus = async (taskStatus, taskId, taskIndex) => {
-  try {
-    store.commit('calendar/changeLoaderStatus', true);
-    await set(firebaseRef(realtimeDB, `users/${currentUserId}/${taskId}/isDone`), taskStatus);
-    store.commit('calendar/changeTaskStatus', { taskStatus, taskIndex });
-    store.commit('calendar/changeLoaderStatus', false);
-  } catch (error) {
-    console.log(error);
-  }
 };
 
 const redirectToDayPage = () => {
@@ -114,25 +104,8 @@ const redirectToDayPage = () => {
   store.commit('calendar/setCurrentDate', currentDay);
 };
 
-const clearTasks = async () => {
-  store.commit('calendar/changeLoaderStatus', true);
-
-  const tasksToRemove = taskList.value.filter((task) => task.date === currentDay.value.id);
-  const updates = tasksToRemove.reduce((acc, task) => {
-    acc[`users/${currentUserId}/${task.id}`] = null;
-    return acc;
-  }, {});
-
-  try {
-    await update(firebaseRef(realtimeDB), updates);
-    taskList.value = taskList.value.filter((task) => task.date !== currentDay.value.id);
-    currentDay.value.tasks = [];
-    store.commit('calendar/setCurrentTasks', []);
-    store.commit('calendar/changeLoaderStatus', false);
-  } catch (error) {
-    alert(error);
-  }
-};
+const tasksToRemove = () => taskListObserver.value
+  .filter((task) => task.date === currentDay.value.id);
 
 onMounted(() => {
   getTasks();
