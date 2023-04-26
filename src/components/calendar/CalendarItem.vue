@@ -21,56 +21,32 @@
 </template>
 
 <script setup>
-import {
-  ref,
-// onMounted, watchEffect, computed,
-} from 'vue';
-// import store from '@/store';
+import { ref, watch } from 'vue';
 
 const props = defineProps({
   day: Number,
   week: String,
   month: String,
   id: Number,
-  taskDone: Boolean,
-  taskPlanned: Boolean,
-  obj: Array,
+  tasks: Array,
 });
-
-console.log(props.obj);
 
 const taskPlanned = ref(false);
 const taskDone = ref(false);
 
-if (props.obj) {
-  props.obj.forEach((el) => {
-    if (el.isDone) {
-      taskDone.value = true;
-    } else {
-      taskPlanned.value = true;
-    }
-  });
-}
-// const allTasks = computed(() => store.getters['calendar/allTasks']);
-
-// const taskCheck = () => {
-//   allTasks.value.forEach((el) => {
-//     // console.log(1);
-//     if (el.date === props.id) {
-//       if (el.isDone === true) {
-//         taskDone.value = true;
-//       } else {
-//         taskPlanned.value = true;
-//       }
-//     }
-//   });
-// };
-
-// watchEffect(allTasks, taskCheck());
-
-// onMounted(() => {
-//   taskCheck();
-// });
+watch(() => props.tasks, (newVal) => {
+  taskPlanned.value = false;
+  taskDone.value = false;
+  if (newVal && newVal.length > 0) {
+    newVal.forEach((el) => {
+      if (el.isDone) {
+        taskDone.value = true;
+      } else {
+        taskPlanned.value = true;
+      }
+    });
+  }
+});
 
 </script>
 

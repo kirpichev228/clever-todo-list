@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper" v-if="taskListObserver">
     <CalendarComp
       @pickedDay="setCurrentDay"
       @click="setCurrentTasks"

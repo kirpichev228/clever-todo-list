@@ -8,7 +8,7 @@
         :day="day.day"
         :week="day.week"
         :month="day.month"
-        :obj="allTasks.filter((el) => el.date === day.id)"
+        :tasks="allTasks.filter((el) => el.date === day.id)"
         @click="
           $emit('pickedDay', {
             id: day.id,
@@ -25,8 +25,11 @@
 </template>
 
 <script setup>
+// мэйби бейби переделать пропс и эмит с этого уебства на
+// что то более классное потрясное(просто отдавать
+// объектб а в дщери уже его разбирать)
 import {
-  ref, onMounted, computed, watchEffect,
+  ref, onMounted, computed,
 } from 'vue';
 import store from '@/store';
 import VScroll from '@/components/directives/VScroll';
@@ -80,11 +83,7 @@ const prevMonth = () => {
 
 onMounted(() => {
   setCalendar();
-  console.log(daysArray.value);
-  console.log(allTasks);
 });
-
-watchEffect(allTasks, console.log('123'));
 
 </script>
 
