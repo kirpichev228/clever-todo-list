@@ -69,7 +69,7 @@ const editTask = async () => {
     emit('modalEditState', false);
     store.commit('calendar/changeLoaderStatus', false);
   } catch (error) {
-    console.log(error);
+    alert(error);
   }
 };
 

@@ -7,7 +7,7 @@
       v-bind:class="{
         'isActive': isWindowActive
       }"
-    ></CalendarComp>
+    />
     <div class="underline" v-if="isWindowActive"></div>
     <div class="day-info" v-if="isWindowActive">
       <div class="day-tasks">

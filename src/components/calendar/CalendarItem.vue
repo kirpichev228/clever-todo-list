@@ -2,30 +2,75 @@
   <div class="cal-item">
     <div class="cal-date">
       <div class="cal-day">
-        {{ day }}
+        {{ props.day }}
       </div>
       <div class="cal-info">
         <div class="cal-month">
-          {{ week }}
+          {{ props.week }}
         </div>
         <div class="cal-week">
-          {{ month }}
+          {{ props.month }}
         </div>
       </div>
     </div>
     <div class="cal-tasks">
-      <div class="cal-planned"></div>
-      <div class="cal-done"></div>
+      <div v-if="taskPlanned" class="cal-planned"></div>
+      <div v-if="taskDone" class="cal-done"></div>
     </div>
   </div>
 </template>
 
 <script setup>
-defineProps({
+import {
+  ref,
+// onMounted, watchEffect, computed,
+} from 'vue';
+// import store from '@/store';
+
+const props = defineProps({
   day: Number,
   week: String,
   month: String,
+  id: Number,
+  taskDone: Boolean,
+  taskPlanned: Boolean,
+  obj: Array,
 });
+
+console.log(props.obj);
+
+const taskPlanned = ref(false);
+const taskDone = ref(false);
+
+if (props.obj) {
+  props.obj.forEach((el) => {
+    if (el.isDone) {
+      taskDone.value = true;
+    } else {
+      taskPlanned.value = true;
+    }
+  });
+}
+// const allTasks = computed(() => store.getters['calendar/allTasks']);
+
+// const taskCheck = () => {
+//   allTasks.value.forEach((el) => {
+//     // console.log(1);
+//     if (el.date === props.id) {
+//       if (el.isDone === true) {
+//         taskDone.value = true;
+//       } else {
+//         taskPlanned.value = true;
+//       }
+//     }
+//   });
+// };
+
+// watchEffect(allTasks, taskCheck());
+
+// onMounted(() => {
+//   taskCheck();
+// });
 
 </script>
 

@@ -22,7 +22,7 @@
         class="tasks-block"
         :class="{ 'isEmpty': currentTasksObserver.length === 0 }">
         <h3 v-if="currentTasksObserver.length === 0">
-          You have no tasks for today
+          You have no tasks for this day
         </h3>
         <ul v-else class="task-list">
           <li

@@ -1,10 +1,10 @@
 export const calendarStore = {
   namespaced: true,
   state: {
+    allTasks: [],
     currentDate: {},
     currentTasks: [],
     loaderStatus: false,
-    allTasks: [],
   },
   mutations: {
     setCurrentDate(state, data) {
@@ -54,8 +54,8 @@ export const calendarStore = {
     deleteTask({ commit }, data) {
       commit('deleteTask', data);
     },
-    editTask({ commit }, data, index) {
-      commit('editTask', data, index);
+    editTask({ commit }, data) {
+      commit('editTask', data);
     },
     changeLoaderStatus({ commit }, data) {
       commit('changeLoaderStatus', data);
