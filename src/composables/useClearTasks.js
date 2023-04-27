@@ -14,6 +14,7 @@ export async function useClearTasks(tasksToRemove, userId, db) {
     store.commit('calendar/clearTasks');
     store.commit('calendar/changeLoaderStatus', false);
   } catch (error) {
-    alert(error);
+    store.commit('setErrorMessage', error);
+    store.commit('setErrorToastStatus');
   }
 }

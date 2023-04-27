@@ -6,6 +6,7 @@ import {
 } from 'firebase/auth';
 import { auth } from '@/firebase/index';
 import router from '@/router';
+import store from '.';
 
 export const authStore = {
   state: {
@@ -44,16 +45,8 @@ export const authStore = {
         commit('setID', auth.lastNotifiedUid);
         router.push('/main');
       } catch (error) {
-        switch (error.code) {
-          case 'auth/user-not-found':
-            alert('User not found');
-            break;
-          case 'auth/wrong-password':
-            alert('Wrong password');
-            break;
-          default:
-            alert(error.message);
-        }
+        store.commit('setErrorMessage', error, { root: true });
+        store.commit('setErrorToastStatus', { root: true });
       }
     },
 
@@ -66,22 +59,8 @@ export const authStore = {
         commit('setID', auth.lastNotifiedUid);
         router.push('/main');
       } catch (error) {
-        switch (error.code) {
-          case 'auth/email-alredy-in-use':
-            alert('Email already in use');
-            break;
-          case 'auth/invalid-email':
-            alert('Invalid email');
-            break;
-          case 'auth/operation-not-allowed':
-            alert('Operation not allowed');
-            break;
-          case 'auth/weak-password':
-            alert('Weak password');
-            break;
-          default:
-            alert(error.message);
-        }
+        store.commit('setErrorMessage', error, { root: true });
+        store.commit('setErrorToastStatus', { root: true });
       }
     },
 

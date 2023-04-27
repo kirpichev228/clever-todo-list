@@ -1,45 +1,31 @@
 <template>
-  <div class="cal-wrapper" v-scroll>
-    <ButtonSample @click="prevMonth">Previous Month</ButtonSample>
+  <div class="cal-wrapper" v-scroll ref="calendarRow">
     <div class="cal-row">
       <CalendarItem
         v-for="day in daysArray" :key="day.id"
-        :id="day.id"
-        :day="day.day"
-        :week="day.week"
-        :month="day.month"
+        :dayData="day"
         :tasks="allTasks.filter((el) => el.date === day.id)"
         @click="
-          $emit('pickedDay', {
-            id: day.id,
-            day: day.day,
-            month: day.month,
-            year: day.year
-          });
+          $emit('pickedDay', day);
           $emit('windowActive', true)"
       ></CalendarItem>
     </div>
-    <ButtonSample @click="nextMonth">Next month</ButtonSample>
-
   </div>
 </template>
 
 <script setup>
-// мэйби бейби переделать пропс и эмит с этого уебства на
-// что то более классное потрясное(просто отдавать
-// объектб а в дщери уже его разбирать)
-import {
-  ref, onMounted, computed,
-} from 'vue';
+
+import { ref, onMounted, computed } from 'vue';
 import store from '@/store';
 import VScroll from '@/components/directives/VScroll';
 import CalendarItem from '@/components/calendar/CalendarItem.vue';
-import ButtonSample from '../UI/ButtonSample.vue';
 
 const monthName = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'];
 const weekDayName = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.'];
 
 const daysArray = ref([]);
+const calendarRow = ref(null);
+
 const allTasks = computed(() => store.getters['calendar/allTasks']);
 
 let currentMonth = new Date().getMonth();
@@ -71,18 +57,18 @@ const nextMonth = () => {
   setCalendar();
 };
 
-const prevMonth = () => {
-  daysArray.value = [];
-  currentMonth = (currentMonth - 1 + 12) % 12;
-  if (currentMonth === 11) {
-    currentYear -= 1;
+const handleScroll = () => {
+  const calendarRowEl = calendarRow.value;
+
+  if (calendarRowEl.scrollLeft + calendarRowEl.offsetWidth >= calendarRowEl.scrollWidth) {
+    nextMonth();
   }
-  today = new Date(currentYear, currentMonth);
-  setCalendar();
 };
 
 onMounted(() => {
   setCalendar();
+  const calendarRowEl = calendarRow.value;
+  calendarRowEl.addEventListener('scroll', handleScroll);
 });
 
 </script>

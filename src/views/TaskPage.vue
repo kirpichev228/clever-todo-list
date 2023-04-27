@@ -116,7 +116,8 @@ const deleteTask = async (task) => {
     store.commit('calendar/deleteTask', task.id);
     store.commit('calendar/changeLoaderStatus', false);
   } catch (error) {
-    alert(error);
+    store.commit('setErrorMessage', error);
+    store.commit('setErrorToastStatus');
   }
 };
 

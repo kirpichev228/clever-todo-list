@@ -2,14 +2,14 @@
   <div class="cal-item">
     <div class="cal-date">
       <div class="cal-day">
-        {{ props.day }}
+        {{ props.dayData.day }}
       </div>
       <div class="cal-info">
         <div class="cal-month">
-          {{ props.week }}
+          {{ props.dayData.week }}
         </div>
         <div class="cal-week">
-          {{ props.month }}
+          {{ props.dayData.month }}
         </div>
       </div>
     </div>
@@ -24,10 +24,12 @@
 import { ref, watch } from 'vue';
 
 const props = defineProps({
-  day: Number,
-  week: String,
-  month: String,
-  id: Number,
+  dayData: {
+    day: Number,
+    week: String,
+    month: String,
+    id: Number,
+  },
   tasks: Array,
 });
 

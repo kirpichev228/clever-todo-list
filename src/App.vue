@@ -1,6 +1,9 @@
 <template>
     <div class="app-wrapper">
       <Navbar></Navbar>
+      <TransitionGroup name="trans" tag="div">
+        <ErrorToast v-if="errorToastStatus"/>
+      </TransitionGroup>
       <router-view>
 
       </router-view>
@@ -8,11 +11,14 @@
 </template>
 
 <script setup>
-import { onBeforeMount } from 'vue';
+import { computed, onBeforeMount } from 'vue';
 import { useStore } from 'vuex';
 import Navbar from './components/NavBar.vue';
+import ErrorToast from './components/UI/ErrorToast.vue';
 
 const store = useStore();
+
+const errorToastStatus = computed(() => store.getters.errorToastStatus);
 
 onBeforeMount(() => {
   store.dispatch('auth/fetchUser');
@@ -45,7 +51,17 @@ onBeforeMount(() => {
     background: var(--background-gradient);
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 10px;
+  }
+
+  .trans-enter-active,
+  .trans-leave-active {
+    transition: all 0.5s ease;
+  }
+  .trans-enter-from,
+  .trans-leave-to {
+    opacity: 0;
+    transform: translateX(50px);
   }
 
 </style>
