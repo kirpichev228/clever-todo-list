@@ -26,7 +26,8 @@ export const calendarStore = {
       state.currentTasks = state.currentTasks.filter((task) => task.id !== data);
     },
     editTask(state, data) {
-      state.currentTasks[data.taskIndex].taskText = data.taskText;
+      state.currentTasks[data.taskIndex].taskName = data.taskName;
+      state.currentTasks[data.taskIndex].taskDesc = data.taskDesc;
     },
     changeLoaderStatus(state, data) {
       state.loaderStatus = data;

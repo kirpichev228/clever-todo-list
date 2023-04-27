@@ -6,12 +6,19 @@
           Edit Task
         </h2>
         <InputSample
-          inputType="text"
-          @inputVal="setTask"
-          v-focus
-          :inputValue="currentTask"
+          :inputType="text"
+          @inputVal="setTaskName"
+          :inputValue="currentName"
         >
-          Enter Task
+          Task Name
+        </InputSample>
+        <InputSample
+          :inputType="text"
+          @inputVal="setTaskDesc"
+          :inputValue="currentDesc"
+          v-focus
+          >
+          Task Description
         </InputSample>
         <div class="modal-buttons">
           <LoaderSample style="height: 1px; bottom:20px" v-if="loaderObserver"/>
@@ -44,27 +51,36 @@ import InputSample from '@/components/UI/InputSample.vue';
 const emit = defineEmits(['modalEditState']);
 
 const props = defineProps({
-  currentTask: String,
+  currentName: String,
+  currentDesc: String,
   currentId: Number,
   currentIndex: Number,
 });
 
-const taskForm = ref('');
+const taskNameForm = ref(props.currentName);
+const taskDescForm = ref(props.currentDesc);
+
 const store = useStore();
 const currentUserId = store.getters['auth/userID'];
 const loaderObserver = computed(() => store.getters['calendar/loaderStatus']);
 
-const setTask = (inputValue) => {
-  taskForm.value = inputValue;
+const setTaskName = (inputValue) => {
+  taskNameForm.value = inputValue;
+};
+
+const setTaskDesc = (inputValue) => {
+  taskDescForm.value = inputValue;
 };
 
 const editTask = async () => {
   try {
     store.commit('calendar/changeLoaderStatus', true);
-    await set(firbaseRef(realtimeDB, `users/${currentUserId}/${props.currentId}/taskText`), taskForm.value);
+    await set(firbaseRef(realtimeDB, `users/${currentUserId}/${props.currentId}/taskName`), taskNameForm.value);
+    await set(firbaseRef(realtimeDB, `users/${currentUserId}/${props.currentId}/taskDesc`), taskDescForm.value);
     store.commit('calendar/editTask', {
       taskIndex: props.currentIndex,
-      taskText: taskForm.value,
+      taskName: taskNameForm.value,
+      taskDesc: taskDescForm.value,
     });
     emit('modalEditState', false);
     store.commit('calendar/changeLoaderStatus', false);

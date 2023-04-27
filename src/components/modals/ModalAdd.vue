@@ -6,11 +6,17 @@
           New Task
         </h2>
         <InputSample
-          inputType="text"
-          @inputVal="setTask"
+          :inputType="text"
+          @inputVal="setTaskName"
           v-focus
         >
-          Enter Task
+          Task Name
+        </InputSample>
+        <InputSample
+          :inputType="text"
+          @inputVal="setTaskDesc"
+        >
+          Task Description
         </InputSample>
         <div class="modal-buttons">
           <LoaderSample style="height: 1px; bottom:20px" v-if="loaderObserver"/>
@@ -42,21 +48,28 @@ import InputSample from '@/components/UI/InputSample.vue';
 
 const emit = defineEmits(['modalAddState']);
 
-const taskForm = vueRef('');
+const taskNameForm = vueRef('');
+const taskDescForm = vueRef('');
+
 const store = useStore();
 
 const currentUserId = store.getters['auth/userID'];
 const loaderObserver = computed(() => store.getters['calendar/loaderStatus']);
 
-const setTask = (inputValue) => {
-  taskForm.value = inputValue;
+const setTaskName = (inputValue) => {
+  taskNameForm.value = inputValue;
+};
+
+const setTaskDesc = (inputValue) => {
+  taskDescForm.value = inputValue;
 };
 
 const addNewTask = async () => {
   const taskID = Date.now();
   const taskToPush = {
     id: taskID,
-    taskText: taskForm.value,
+    taskName: taskNameForm.value,
+    taskDesc: taskDescForm.value,
     isDone: false,
     date: store.getters['calendar/currentDate'].id,
   };
@@ -78,6 +91,7 @@ const addNewTask = async () => {
 <style scoped>
 .wrapper {
   position: absolute;
+  z-index: 10;
   width: 100vw;
   height: 100vh;
   background: rgba(0, 0, 0, 0.5);

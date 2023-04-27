@@ -6,7 +6,8 @@
   <ModalEdit
     v-if="modalState.edit"
     @modalEditState="setModalEditState"
-    :currentTask="choosedTask.text"
+    :currentName="choosedTask.name"
+    :currentDesc="choosedTask.desc"
     :currentId="choosedTask.id"
     :currentIndex="choosedTask.index"
   />
@@ -32,10 +33,15 @@
           >
             <CheckboxSample
               :isDone="task.isDone"
-              :labelFor="task.taskText"
+              :labelFor="task.taskName"
               @checkboxChange="(data) => useTaskStatus(data, task.id, index, currentUserId)"
             >
-              {{ task.taskText }}
+            <template #heading>
+              {{ task.taskName }}
+            </template>
+            <template #description>
+              {{ task.taskDesc }}
+            </template>
             </CheckboxSample>
             <div class="buttons-block">
               <DeleteIcon @click="deleteTask(task)"></DeleteIcon>
@@ -88,7 +94,8 @@ const modalState = reactive({
   edit: false,
 });
 const choosedTask = reactive({
-  text: '',
+  name: '',
+  desc: '',
   id: NaN,
   index: NaN,
 });
@@ -122,7 +129,8 @@ const deleteTask = async (task) => {
 };
 
 const editTask = async (index) => {
-  choosedTask.text = currentTasksObserver.value[index].taskText;
+  choosedTask.name = currentTasksObserver.value[index].taskName;
+  choosedTask.desc = currentTasksObserver.value[index].taskDesc;
   choosedTask.id = currentTasksObserver.value[index].id;
   choosedTask.index = index;
   setModalEditState(true);

@@ -1,5 +1,12 @@
 <template>
   <label :for="labelFor" class="custom-checkbox">
+    <div class="description">
+      <slot name="description"></slot>
+    </div>
+    <div class="heading">
+      <span>Task Name:</span>
+      <slot name="heading"></slot>
+    </div>
     <input
       type="checkbox"
       :name="labelFor"
@@ -9,7 +16,6 @@
       :checked="isDone"
     >
     <span class="checkmark"></span>
-    <slot></slot>
   </label>
 </template>
 
@@ -26,12 +32,21 @@ defineProps({
 .custom-checkbox {
   cursor: pointer;
   display: flex;
+  flex-direction: column-reverse;
   gap: 10px;
   overflow-wrap: anywhere;
+  word-wrap: break-word;
+}
+
+.custom-checkbox:hover {
+  color: var(--color-hover);
 }
 
 .custom-checkbox input[type="checkbox"] {
   display:none;
+}
+.checkmark {
+  width: 28px;
 }
 .custom-checkbox .checkmark {
   position: relative;
@@ -64,5 +79,19 @@ defineProps({
   border: solid var(--color-hover);
   border-width: 0 3px 3px 0;
   transform: rotate(45deg);
+}
+
+.heading {
+  width: 100%;
+  font-weight: 900;
+  margin-left: 50px;
+  margin-top: -37px;
+  display: flex;
+  gap: 20px
+}
+
+.description {
+  width: 100%;
+  margin-left: 50px;
 }
 </style>

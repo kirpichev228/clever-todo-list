@@ -4,6 +4,7 @@
   >
     <slot></slot>
     <input
+      required
       :type="inputType"
       :name="inputType"
       :id="inputType"
@@ -41,7 +42,7 @@ label:hover {
 }
 
 input {
-  width: 80%;
+  width: 70%;
   font-size: 20px;
   background: none;
   border: 1px solid var(--color-static);

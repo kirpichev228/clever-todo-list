@@ -26,7 +26,12 @@
               :isDone="task.isDone"
               @checkboxChange="(data) => useTaskStatus(data, task.id, index, currentUserId)"
             >
-              {{ task.taskText }}
+              <template #heading>
+                {{ task.taskName }}
+              </template>
+              <template #description>
+                {{ task.taskDesc }}
+              </template>
             </CheckboxSample>
           </li>
         </ul>
