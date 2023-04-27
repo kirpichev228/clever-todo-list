@@ -148,6 +148,7 @@ onMounted(() => {
   align-items: flex-start;
   gap: 30px;
   overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .day-tasks::-webkit-scrollbar {
@@ -187,6 +188,7 @@ onMounted(() => {
   word-wrap: break-word;
   border: 1px solid var(--color-static);
   padding: 10px;
+  padding-right: 40px;
 }
 
 .task-item:hover {
