@@ -41,12 +41,8 @@
             </template>
             </CheckboxSample>
             <div class="buttons-block">
-              <DeleteIcon
-                @click="deleteTaskService(task.id, currentUserId)"
-              />
-              <EditIcon
-                @click="editTask(index)"
-              />
+              <DeleteIcon @click="deleteTaskService(task.id, currentUserId)"/>
+              <EditIcon @click="editTask(index)"/>
             </div>
           </li>
         </ul>

@@ -30,24 +30,27 @@
 
 <script setup>
 import { useStore } from 'vuex';
-import { ref } from 'vue';
+import { reactive } from 'vue';
 import VFocus from '@/components/directives/VFocus';
 import ButtonSample from '../components/UI/ButtonSample.vue';
 import InputSample from '../components/UI/InputSample.vue';
 
-const loginForm = ref({});
+const loginForm = reactive({
+  password: '',
+  email: '',
+});
 const store = useStore();
 
 const login = () => {
-  store.dispatch('auth/login', loginForm.value);
+  store.dispatch('auth/login', loginForm);
 };
 
 const setPass = (inputValue) => {
-  loginForm.value.password = inputValue;
+  loginForm.password = inputValue;
 };
 
 const setMail = (inputValue) => {
-  loginForm.value.email = inputValue;
+  loginForm.email = inputValue;
 };
 
 </script>

@@ -39,7 +39,7 @@
 
 <script setup>
 import { useStore } from 'vuex';
-import { computed, ref as vueRef } from 'vue';
+import { computed, reactive } from 'vue';
 import addNewTaskService from '@/services/addNewTaskService';
 import LoaderSample from '@/components/UI/LoaderSample.vue';
 import VFocus from '@/components/directives/VFocus';
@@ -48,8 +48,10 @@ import InputSample from '@/components/UI/InputSample.vue';
 
 const emit = defineEmits(['modalAddState']);
 
-const taskNameForm = vueRef('');
-const taskDescForm = vueRef('');
+const taskForm = reactive({
+  name: '',
+  desc: '',
+});
 
 const store = useStore();
 
@@ -57,19 +59,19 @@ const currentUserId = store.getters['auth/userID'];
 const loaderObserver = computed(() => store.getters['calendar/loaderStatus']);
 
 const setTaskName = (inputValue) => {
-  taskNameForm.value = inputValue;
+  taskForm.name = inputValue;
 };
 
 const setTaskDesc = (inputValue) => {
-  taskDescForm.value = inputValue;
+  taskForm.desc = inputValue;
 };
 
 const addNewTask = () => {
   const taskID = Date.now();
   const taskToPush = {
     id: taskID,
-    taskName: taskNameForm.value,
-    taskDesc: taskDescForm.value,
+    taskName: taskForm.name,
+    taskDesc: taskForm.desc,
     isDone: false,
     date: store.getters['calendar/currentDate'].id,
   };

@@ -3,9 +3,9 @@
     <h1 class="heading">
       Clever ToDo
     </h1>
-    <div class="nav-buttons" v-if="storeObserver">
+    <div class="nav-buttons" v-if="userObserver">
       <LoaderSample v-if="loaderObserver"/>
-      <span class="current-user"> {{ storeObserver.email }} </span>
+      <span class="current-user"> {{ userObserver.email }} </span>
       <ButtonSample
         @click="logout"
       >
@@ -24,7 +24,7 @@ import ButtonSample from './UI/ButtonSample.vue';
 const store = useStore();
 
 const loaderObserver = computed(() => store.getters['calendar/loaderStatus']);
-const storeObserver = computed(() => store.getters['auth/user']);
+const userObserver = computed(() => store.getters['auth/user']);
 
 const logout = () => {
   store.dispatch('auth/logout');

@@ -2,14 +2,14 @@
   <div class="cal-item">
     <div class="cal-date">
       <div class="cal-day">
-        {{ props.dayData.day }}
+        {{ dayData.day }}
       </div>
       <div class="cal-info">
         <div class="cal-month">
-          {{ props.dayData.week }}
+          {{ dayData.week }}
         </div>
         <div class="cal-week">
-          {{ props.dayData.month }}
+          {{ dayData.month }}
         </div>
       </div>
     </div>
@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { computed } from 'vue';
 
 const props = defineProps({
   dayData: {
@@ -33,22 +33,8 @@ const props = defineProps({
   tasks: Array,
 });
 
-const taskPlanned = ref(false);
-const taskDone = ref(false);
-
-watch(() => props.tasks, (newVal) => {
-  taskPlanned.value = false;
-  taskDone.value = false;
-  if (newVal && newVal.length > 0) {
-    newVal.forEach((el) => {
-      if (el.isDone) {
-        taskDone.value = true;
-      } else {
-        taskPlanned.value = true;
-      }
-    });
-  }
-});
+const taskPlanned = computed(() => !!props.tasks.find((task) => !task.isDone));
+const taskDone = computed(() => !!props.tasks.find((task) => task.isDone));
 
 </script>
 
