@@ -90,10 +90,14 @@ const setTaskDescription = (value) => {
 };
 
 const setTaskDate = (value) => {
+  console.log(value);
   taskFormValue.date = value;
 };
 
-const editTask = async () => {
+const editTask = () => {
+  if (taskFormValue.date === props.currentTask.date) {
+    taskFormValue.date = props.currentTask.date + 10800000;
+  }
   editTaskService(
     currentUserId,
     props.currentTask.id,

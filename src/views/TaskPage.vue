@@ -114,7 +114,7 @@ const setModalEditState = (data) => {
 
 const tasksToRemove = taskListObserver.value.filter((task) => task.date === currentDate.id);
 
-const editTask = async (index) => {
+const editTask = (index) => {
   choosedTask.name = currentTasksObserver.value[index].taskName;
   choosedTask.desc = currentTasksObserver.value[index].taskDesc;
   choosedTask.id = currentTasksObserver.value[index].id;
