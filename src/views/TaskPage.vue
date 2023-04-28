@@ -41,10 +41,12 @@
             </template>
             </CheckboxSample>
             <div class="buttons-block">
-              <DeleteIcon @click="deleteTask(task)"></DeleteIcon>
+              <DeleteIcon
+                @click="deleteTaskService(task.id, currentUserId)"
+              />
               <EditIcon
                 @click="editTask(index)"
-              ></EditIcon>
+              />
             </div>
           </li>
         </ul>
@@ -71,16 +73,17 @@
 <script setup>
 import { useStore } from 'vuex';
 import { computed, reactive } from 'vue';
-import {
-  ref as firebaseRef, remove,
-} from 'firebase/database';
+
 import { realtimeDB } from '@/firebase/index';
+import deleteTaskService from '@/services/deleteTaskService';
+
 import ButtonSample from '@/components/UI/ButtonSample.vue';
 import ModalAdd from '@/components/modals/ModalAdd.vue';
 import ModalEdit from '@/components/modals/ModalEdit.vue';
 import CheckboxSample from '@/components/UI/CheckboxSample.vue';
 import DeleteIcon from '@/icons/DeleteIcon.vue';
 import EditIcon from '@/icons/EditIcon.vue';
+
 import { useTaskStatus } from '@/composables/useTaskStatus';
 import { useClearTasks } from '@/composables/useClearTasks';
 
@@ -90,6 +93,7 @@ const modalState = reactive({
   add: false,
   edit: false,
 });
+
 const choosedTask = reactive({
   name: '',
   desc: '',
@@ -97,7 +101,6 @@ const choosedTask = reactive({
   date: NaN,
   index: NaN,
 });
-// id (currentDate.id) у таск пейджа совпадает с айдишником таски (currentTasksObserver[0].date)
 
 const currentDate = store.getters['calendar/currentDate'];
 const currentUserId = store.getters['auth/userID'];
@@ -115,18 +118,6 @@ const setModalEditState = (data) => {
 
 const tasksToRemove = taskListObserver.value.filter((task) => task.date === currentDate.id);
 
-const deleteTask = async (task) => {
-  try {
-    store.commit('calendar/changeLoaderStatus', true);
-    await remove(firebaseRef(realtimeDB, `users/${currentUserId}/${task.id}`));
-    store.commit('calendar/deleteTask', task.id);
-    store.commit('calendar/changeLoaderStatus', false);
-  } catch (error) {
-    store.commit('setErrorMessage', error);
-    store.commit('setErrorToastStatus');
-  }
-};
-
 const editTask = async (index) => {
   choosedTask.name = currentTasksObserver.value[index].taskName;
   choosedTask.desc = currentTasksObserver.value[index].taskDesc;
@@ -135,6 +126,26 @@ const editTask = async (index) => {
   choosedTask.index = index;
   setModalEditState(true);
 };
+
+// function settersReactive(obj) {
+//   const newObj = reactive(obj);
+//   Object.keys(obj).forEach((key) => {
+//     newObj[`set${key[0].toUpperCase() + key.substring(1)}`] = (arg) => {
+//       newObj[key] = arg;
+//     };
+//   });
+//   return newObj;
+// }
+
+// const modalState = settersReactive({
+//   add: false,
+//   edit: false,
+// })
+
+// modalState.setAdd(true)
+
+// Биг чел придумал такую тему что бы не прописывать функции сеттеры для
+// реактивных переменных, хуй знает норм чи не, но выглядит прыкольна
 
 </script>
 

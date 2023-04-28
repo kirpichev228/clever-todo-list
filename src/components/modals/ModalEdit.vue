@@ -7,7 +7,7 @@
         </h2>
         <InputSample
           :inputType="text"
-          @inputVal="setTaskName"
+          @inputVal="(value) => taskFormValue.name = value"
           :inputValue="currentTask.name"
           :length="20"
         >
@@ -15,7 +15,7 @@
         </InputSample>
         <InputSample
           :inputType="text"
-          @inputVal="setTaskDesc"
+          @inputVal="(value) => taskFormValue.desc = value"
           :inputValue="currentTask.desc"
           v-focus
           >
@@ -30,7 +30,7 @@
               id="date"
               class="input"
               :valueAsNumber="currentTask.date + 86400000"
-              @change="setTaskDate($event.target.valueAsNumber)"
+              @change="taskFormValue.date = $event.target.valueAsNumber"
             >
           </label>
           <ButtonSample
@@ -52,8 +52,7 @@
 <script setup>
 import { useStore } from 'vuex';
 import { ref, computed } from 'vue';
-import { ref as firbaseRef, set } from 'firebase/database';
-import { realtimeDB } from '@/firebase/index';
+import editTaskService from '@/services/editTaskService';
 import LoaderSample from '@/components/UI/LoaderSample.vue';
 import VFocus from '@/components/directives/VFocus';
 import ButtonSample from '@/components/UI/ButtonSample.vue';
@@ -71,44 +70,24 @@ const props = defineProps({
   },
 });
 
-const taskNameForm = ref(props.currentTask.name);
-const taskDescForm = ref(props.currentTask.desc);
-const taskDateForm = ref(props.currentTask.date);
+const taskFormValue = ref({
+  name: props.currentTask.name,
+  desc: props.currentTask.desc,
+  date: props.currentTask.date,
+});
 
 const store = useStore();
 const currentUserId = store.getters['auth/userID'];
 const loaderObserver = computed(() => store.getters['calendar/loaderStatus']);
 
-const setTaskName = (inputValue) => {
-  taskNameForm.value = inputValue;
-};
-
-const setTaskDesc = (inputValue) => {
-  taskDescForm.value = inputValue;
-};
-
-const setTaskDate = (inputValue) => {
-  taskDateForm.value = inputValue - 10800000;
-};
-
 const editTask = async () => {
-  try {
-    store.commit('calendar/changeLoaderStatus', true);
-    await set(firbaseRef(realtimeDB, `users/${currentUserId}/${props.currentTask.id}/taskName`), taskNameForm.value);
-    await set(firbaseRef(realtimeDB, `users/${currentUserId}/${props.currentTask.id}/taskDesc`), taskDescForm.value);
-    await set(firbaseRef(realtimeDB, `users/${currentUserId}/${props.currentTask.id}/date`), taskDateForm.value);
-    store.commit('calendar/editTask', {
-      taskIndex: props.currentTask.index,
-      taskName: taskNameForm.value,
-      taskDesc: taskDescForm.value,
-      taskDate: taskDateForm.value,
-    });
-    emit('modalEditState', false);
-    store.commit('calendar/changeLoaderStatus', false);
-  } catch (error) {
-    store.commit('setErrorMessage', error);
-    store.commit('setErrorToastStatus');
-  }
+  editTaskService(
+    currentUserId,
+    props.currentTask.id,
+    taskFormValue.value,
+    props.currentTask.index,
+  );
+  emit('modalEditState', false);
 };
 
 </script>

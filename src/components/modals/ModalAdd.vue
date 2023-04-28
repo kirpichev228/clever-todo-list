@@ -40,8 +40,7 @@
 <script setup>
 import { useStore } from 'vuex';
 import { computed, ref as vueRef } from 'vue';
-import { ref, set } from 'firebase/database';
-import { realtimeDB } from '@/firebase/index';
+import addNewTaskService from '@/services/addNewTaskService';
 import LoaderSample from '@/components/UI/LoaderSample.vue';
 import VFocus from '@/components/directives/VFocus';
 import ButtonSample from '@/components/UI/ButtonSample.vue';
@@ -65,7 +64,7 @@ const setTaskDesc = (inputValue) => {
   taskDescForm.value = inputValue;
 };
 
-const addNewTask = async () => {
+const addNewTask = () => {
   const taskID = Date.now();
   const taskToPush = {
     id: taskID,
@@ -74,17 +73,8 @@ const addNewTask = async () => {
     isDone: false,
     date: store.getters['calendar/currentDate'].id,
   };
-
-  try {
-    store.commit('calendar/changeLoaderStatus', true);
-    await set(ref(realtimeDB, `users/${currentUserId}/${taskID}`), taskToPush);
-    store.commit('calendar/addTask', taskToPush);
-    emit('modalAddState', false);
-    store.commit('calendar/changeLoaderStatus', false);
-  } catch (error) {
-    store.commit('setErrorMessage', error);
-    store.commit('setErrorToastStatus');
-  }
+  addNewTaskService(taskToPush, taskID, currentUserId);
+  emit('modalAddState', false);
 };
 
 </script>
