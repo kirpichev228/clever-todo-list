@@ -6,10 +6,7 @@
   <ModalEdit
     v-if="modalState.edit"
     @modalEditState="setModalEditState"
-    :currentName="choosedTask.name"
-    :currentDesc="choosedTask.desc"
-    :currentId="choosedTask.id"
-    :currentIndex="choosedTask.index"
+    :currentTask="choosedTask"
   />
   <div class="wrapper">
     <h2 class="heading">
@@ -97,8 +94,10 @@ const choosedTask = reactive({
   name: '',
   desc: '',
   id: NaN,
+  date: NaN,
   index: NaN,
 });
+// id (currentDate.id) у таск пейджа совпадает с айдишником таски (currentTasksObserver[0].date)
 
 const currentDate = store.getters['calendar/currentDate'];
 const currentUserId = store.getters['auth/userID'];
@@ -132,6 +131,7 @@ const editTask = async (index) => {
   choosedTask.name = currentTasksObserver.value[index].taskName;
   choosedTask.desc = currentTasksObserver.value[index].taskDesc;
   choosedTask.id = currentTasksObserver.value[index].id;
+  choosedTask.date = currentTasksObserver.value[index].date;
   choosedTask.index = index;
   setModalEditState(true);
 };

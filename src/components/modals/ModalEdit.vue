@@ -8,20 +8,31 @@
         <InputSample
           :inputType="text"
           @inputVal="setTaskName"
-          :inputValue="currentName"
+          :inputValue="currentTask.name"
+          :length="20"
         >
           Task Name
         </InputSample>
         <InputSample
           :inputType="text"
           @inputVal="setTaskDesc"
-          :inputValue="currentDesc"
+          :inputValue="currentTask.desc"
           v-focus
           >
           Task Description
         </InputSample>
         <div class="modal-buttons">
           <LoaderSample style="height: 1px; bottom:20px" v-if="loaderObserver"/>
+          <label for="date" class="label">
+            <input
+              type="date"
+              name="date"
+              id="date"
+              class="input"
+              :valueAsNumber="currentTask.date + 86400000"
+              @change="setTaskDate($event.target.valueAsNumber)"
+            >
+          </label>
           <ButtonSample
             type="submit"
           >
@@ -51,14 +62,18 @@ import InputSample from '@/components/UI/InputSample.vue';
 const emit = defineEmits(['modalEditState']);
 
 const props = defineProps({
-  currentName: String,
-  currentDesc: String,
-  currentId: Number,
-  currentIndex: Number,
+  currentTask: {
+    name: String,
+    desc: String,
+    id: Number,
+    index: Number,
+    date: Number,
+  },
 });
 
-const taskNameForm = ref(props.currentName);
-const taskDescForm = ref(props.currentDesc);
+const taskNameForm = ref(props.currentTask.name);
+const taskDescForm = ref(props.currentTask.desc);
+const taskDateForm = ref(props.currentTask.date);
 
 const store = useStore();
 const currentUserId = store.getters['auth/userID'];
@@ -72,15 +87,21 @@ const setTaskDesc = (inputValue) => {
   taskDescForm.value = inputValue;
 };
 
+const setTaskDate = (inputValue) => {
+  taskDateForm.value = inputValue - 10800000;
+};
+
 const editTask = async () => {
   try {
     store.commit('calendar/changeLoaderStatus', true);
-    await set(firbaseRef(realtimeDB, `users/${currentUserId}/${props.currentId}/taskName`), taskNameForm.value);
-    await set(firbaseRef(realtimeDB, `users/${currentUserId}/${props.currentId}/taskDesc`), taskDescForm.value);
+    await set(firbaseRef(realtimeDB, `users/${currentUserId}/${props.currentTask.id}/taskName`), taskNameForm.value);
+    await set(firbaseRef(realtimeDB, `users/${currentUserId}/${props.currentTask.id}/taskDesc`), taskDescForm.value);
+    await set(firbaseRef(realtimeDB, `users/${currentUserId}/${props.currentTask.id}/date`), taskDateForm.value);
     store.commit('calendar/editTask', {
-      taskIndex: props.currentIndex,
+      taskIndex: props.currentTask.index,
       taskName: taskNameForm.value,
       taskDesc: taskDescForm.value,
+      taskDate: taskDateForm.value,
     });
     emit('modalEditState', false);
     store.commit('calendar/changeLoaderStatus', false);
@@ -95,6 +116,7 @@ const editTask = async () => {
 <style scoped>
 .wrapper {
   position: absolute;
+  z-index: 10;
   width: 100vw;
   height: 100vh;
   background: rgba(0, 0, 0, 0.5);
@@ -118,6 +140,22 @@ const editTask = async () => {
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+.label {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.input {
+  background: none;
+  color: var(--color-static);
+  outline: none;
+  font-size: 20px;
+  padding: 10px;
+  border: 1px solid var(--color-static);
 }
 
 .modal-buttons {

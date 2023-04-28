@@ -9,6 +9,7 @@
       :name="inputType"
       :id="inputType"
       :placeholder="inputType"
+      :maxlength="length"
       @change="$emit('inputVal', $event.target.value)"
       :value="inputValue"
     >
@@ -21,6 +22,7 @@ import { defineProps } from 'vue';
 defineProps({
   inputType: String,
   inputValue: String,
+  length: Number,
 });
 defineEmits([
   'inputVal',

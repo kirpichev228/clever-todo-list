@@ -8,6 +8,7 @@
         <InputSample
           :inputType="text"
           @inputVal="setTaskName"
+          :length="20"
           v-focus
         >
           Task Name

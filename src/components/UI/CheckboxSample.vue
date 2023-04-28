@@ -82,7 +82,6 @@ defineProps({
 }
 
 .heading {
-  width: 100%;
   font-weight: 900;
   margin-left: 50px;
   margin-top: -37px;
@@ -91,7 +90,6 @@ defineProps({
 }
 
 .description {
-  width: 100%;
   margin-left: 50px;
 }
 </style>
