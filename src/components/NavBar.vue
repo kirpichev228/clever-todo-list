@@ -7,7 +7,7 @@
       <LoaderSample v-if="loaderObserver"/>
       <span class="current-user"> {{ storeObserver.email }} </span>
       <ButtonSample
-        @click="$store.dispatch('auth/logout')"
+        @click="logout"
       >
         Log Out
       </ButtonSample>
@@ -25,6 +25,11 @@ const store = useStore();
 
 const loaderObserver = computed(() => store.getters['calendar/loaderStatus']);
 const storeObserver = computed(() => store.getters['auth/user']);
+
+const logout = () => {
+  store.dispatch('auth/logout');
+  store.dispatch('calendar/clearAllTasks');
+};
 
 </script>
 

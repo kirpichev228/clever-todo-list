@@ -22,6 +22,11 @@ export const calendarStore = {
     clearTasks(state) {
       state.currentTasks = [];
     },
+    clearAllTasks(state) {
+      state.allTasks = [];
+      state.currentDate = {};
+      state.currentTasks = [];
+    },
     deleteTask(state, data) {
       state.currentTasks = state.currentTasks.filter((task) => task.id !== data);
     },
@@ -54,6 +59,9 @@ export const calendarStore = {
     },
     clearTasks({ commit }) {
       commit('clearTasks');
+    },
+    clearAllTasks({ commit }) {
+      commit('clearAllTasks');
     },
     deleteTask({ commit }, data) {
       commit('deleteTask', data);
