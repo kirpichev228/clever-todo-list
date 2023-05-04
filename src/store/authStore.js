@@ -14,10 +14,10 @@ export const authStore = {
     userID: null,
   },
   mutations: {
-    SET_USER(state, user) {
+    setUser(state, user) {
       state.user = user;
     },
-    CLEAR_USER(state) {
+    clearUser(state) {
       state.user = null;
     },
     setID(state, id) {
@@ -41,7 +41,7 @@ export const authStore = {
 
       try {
         await signInWithEmailAndPassword(auth, email, password);
-        commit('SET_USER', auth.currentUser);
+        commit('setUser', auth.currentUser);
         commit('setID', auth.lastNotifiedUid);
         router.push('/main');
       } catch (error) {
@@ -55,7 +55,7 @@ export const authStore = {
 
       try {
         await createUserWithEmailAndPassword(auth, email, password);
-        commit('SET_USER', auth.currentUser);
+        commit('setUser', auth.currentUser);
         commit('setID', auth.lastNotifiedUid);
         router.push('/main');
       } catch (error) {
@@ -66,7 +66,7 @@ export const authStore = {
 
     async logout({ commit }) {
       await signOut(auth);
-      commit('CLEAR_USER');
+      commit('clearUser');
       commit('clearID');
       router.push('/login');
     },
@@ -87,10 +87,10 @@ export const authStore = {
     async setUser({ commit }) {
       auth.onAuthStateChanged(async (user) => {
         if (user === null) {
-          commit('CLEAR_USER');
+          commit('clearUser');
           commit('clearID');
         } else {
-          commit('SET_USER', user);
+          commit('setUser', user);
           commit('setID', user.uid);
         }
       });

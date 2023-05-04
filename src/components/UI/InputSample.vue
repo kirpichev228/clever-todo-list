@@ -1,13 +1,13 @@
 <template>
   <label
-    :for="inputType"
+    :for="setInputId"
   >
     <slot></slot>
     <input
       required
       :type="inputType"
-      :name="inputType"
-      :id="inputType"
+      :name="setInputId"
+      :id="setInputId"
       :placeholder="inputType"
       :maxlength="length"
       @change="$emit('inputVal', $event.target.value)"
@@ -27,6 +27,8 @@ defineProps({
 defineEmits([
   'inputVal',
 ]);
+
+const setInputId = new Date().getTime();
 
 </script>
 
