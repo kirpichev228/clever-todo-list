@@ -6,17 +6,17 @@
           Edit Task
         </h2>
         <InputSample
-          :inputType="text"
-          @inputVal="setTaskName"
-          :inputValue="currentTask.name"
-          :length="20"
+          placeholder="Enter Task Name"
+          type="text"
+          v-model="taskFormValue.name"
+          length="20"
         >
           Task Name
         </InputSample>
         <InputSample
-          :inputType="text"
-          @inputVal="setTaskDescription"
-          :inputValue="currentTask.desc"
+          type="text"
+          placeholder="Enter Task Description"
+          v-model="taskFormValue.desc"
           v-focus
         >
           Task Description
@@ -81,16 +81,7 @@ const store = useStore();
 const currentUserId = store.getters['auth/userID'];
 const loaderObserver = computed(() => store.getters['calendar/loaderStatus']);
 
-const setTaskName = (value) => {
-  taskFormValue.name = value;
-};
-
-const setTaskDescription = (value) => {
-  taskFormValue.desc = value;
-};
-
 const setTaskDate = (value) => {
-  console.log(value);
   taskFormValue.date = value;
 };
 

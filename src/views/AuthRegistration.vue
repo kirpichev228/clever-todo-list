@@ -4,19 +4,35 @@
     <div class="inputs-field">
       <form class="form" @submit.prevent="register">
         <InputSample
-          inputType="email"
-          @inputVal="setMail"
+          v-model="registerForm.email"
+          type="email"
+          placeholder="Enter Email"
           v-focus
         >
           Email
         </InputSample>
+
         <InputSample
-          inputType="password"
-          @inputVal="setPass"
+          v-model="registerForm.password"
+          type="password"
+          placeholder="Enter Password"
         >
           Password
         </InputSample>
-        <ButtonSample type="submit">
+        <InputSample
+          type="password"
+          v-model="registerForm.confirm"
+          placeholder="Confirm Your Password"
+        >
+          Confirm Password
+        </InputSample>
+        <ButtonSample
+          type="submit"
+          :disabled="!isPasswordsMatch"
+          v-bind:class="{
+            'wrong': !isPasswordsMatch
+          }"
+        >
           Register
         </ButtonSample>
       </form>
@@ -30,7 +46,7 @@
 
 <script setup>
 import { useStore } from 'vuex';
-import { reactive } from 'vue';
+import { computed, reactive } from 'vue';
 import VFocus from '@/directives/VFocus';
 import ButtonSample from '../components/UI/ButtonSample.vue';
 import InputSample from '../components/UI/InputSample.vue';
@@ -38,6 +54,7 @@ import InputSample from '../components/UI/InputSample.vue';
 const registerForm = reactive({
   password: '',
   email: '',
+  confirm: '',
 });
 const store = useStore();
 
@@ -45,13 +62,7 @@ const register = () => {
   store.dispatch('auth/register', registerForm);
 };
 
-const setPass = (inputValue) => {
-  registerForm.password = inputValue;
-};
-
-const setMail = (inputValue) => {
-  registerForm.email = inputValue;
-};
+const isPasswordsMatch = computed(() => registerForm.confirm === registerForm.password);
 
 </script>
 
@@ -59,7 +70,7 @@ const setMail = (inputValue) => {
 .auth-wrapper {
   margin: auto;
   padding: 10px;
-  width: 600px;
+  width: 700px;
   border: 2px solid var(--color-static);
   display: flex;
   flex-direction: column;
@@ -83,6 +94,11 @@ const setMail = (inputValue) => {
 
 .link:hover {
   color: var(--color-hover);
+}
+
+.wrong:hover {
+  color: var(--color-static);
+  cursor: not-allowed;
 }
 
 </style>

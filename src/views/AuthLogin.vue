@@ -4,15 +4,17 @@
     <div class="inputs-field">
       <form class="form" @submit.prevent="login">
         <InputSample
-          inputType="email"
-          @inputVal="setMail"
+          type="email"
+          placeholder="Enter Email"
+          v-model="loginForm.email"
           v-focus
         >
           Email
         </InputSample>
         <InputSample
-          inputType="password"
-          @inputVal="setPass"
+          type="password"
+          placeholder="Enter Password"
+          v-model="loginForm.password"
         >
           Password
         </InputSample>
@@ -43,14 +45,6 @@ const store = useStore();
 
 const login = () => {
   store.dispatch('auth/login', loginForm);
-};
-
-const setPass = (inputValue) => {
-  loginForm.password = inputValue;
-};
-
-const setMail = (inputValue) => {
-  loginForm.email = inputValue;
 };
 
 </script>

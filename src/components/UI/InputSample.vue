@@ -1,17 +1,14 @@
+<!-- eslint-disable vuejs-accessibility/label-has-for -->
 <template>
-  <label
-    :for="setInputId"
-  >
+  <label>
     <slot></slot>
     <input
       required
-      :type="inputType"
-      :name="setInputId"
-      :id="setInputId"
-      :placeholder="inputType"
-      :maxlength="length"
-      @change="$emit('inputVal', $event.target.value)"
-      :value="inputValue"
+      :type="props.type"
+      :placeholder="props.placeholder"
+      :maxlength="props.length"
+      @input="$emit('update:modelValue', $event.target.value)"
+      :value="modelValue"
     >
   </label>
 </template>
@@ -19,16 +16,16 @@
 <script setup>
 import { defineProps } from 'vue';
 
-defineProps({
-  inputType: String,
-  inputValue: String,
+const props = defineProps({
+  type: String,
+  placeholder: {
+    type: String,
+    required: false,
+  },
   length: Number,
-});
-defineEmits([
-  'inputVal',
-]);
 
-const setInputId = new Date().getTime();
+  modelValue: String,
+});
 
 </script>
 

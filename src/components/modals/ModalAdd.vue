@@ -6,16 +6,18 @@
           New Task
         </h2>
         <InputSample
-          :inputType="text"
-          @inputVal="setTaskName"
-          :length="20"
+          placeholder="Enter Task Name"
+          type="text"
+          v-model="taskForm.name"
+          length="20"
           v-focus
         >
           Task Name
         </InputSample>
         <InputSample
-          :inputType="text"
-          @inputVal="setTaskDesc"
+          type="text"
+          placeholder="Enter Task Description"
+          v-model="taskForm.desc"
         >
           Task Description
         </InputSample>
@@ -57,14 +59,6 @@ const store = useStore();
 
 const currentUserId = store.getters['auth/userID'];
 const loaderObserver = computed(() => store.getters['calendar/loaderStatus']);
-
-const setTaskName = (inputValue) => {
-  taskForm.name = inputValue;
-};
-
-const setTaskDesc = (inputValue) => {
-  taskForm.desc = inputValue;
-};
 
 const addNewTask = () => {
   const taskID = Date.now();
