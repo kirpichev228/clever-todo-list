@@ -10,7 +10,6 @@
 defineProps({
   width: { type: String, default: '25px' },
   height: { type: String, default: '25px' },
-  // fill: { type: String, default: 'rgba(255, 255, 255, 0.6)' },
   viewBox: { type: String, default: '0 0 1024 1024' },
 });
 

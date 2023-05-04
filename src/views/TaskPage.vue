@@ -127,26 +127,6 @@ const editTask = async (index) => {
   setModalEditState(true);
 };
 
-// function settersReactive(obj) {
-//   const newObj = reactive(obj);
-//   Object.keys(obj).forEach((key) => {
-//     newObj[`set${key[0].toUpperCase() + key.substring(1)}`] = (arg) => {
-//       newObj[key] = arg;
-//     };
-//   });
-//   return newObj;
-// }
-
-// const modalState = settersReactive({
-//   add: false,
-//   edit: false,
-// })
-
-// modalState.setAdd(true)
-
-// Биг чел придумал такую тему что бы не прописывать функции сеттеры для
-// реактивных переменных, хуй знает норм чи не, но выглядит прыкольна
-
 </script>
 
 <style scoped>

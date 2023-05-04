@@ -54,7 +54,7 @@ import { useStore } from 'vuex';
 import { ref, computed } from 'vue';
 import editTaskService from '@/services/editTaskService';
 import LoaderSample from '@/components/UI/LoaderSample.vue';
-import VFocus from '@/components/directives/VFocus';
+import VFocus from '@/directives/VFocus';
 import ButtonSample from '@/components/UI/ButtonSample.vue';
 import InputSample from '@/components/UI/InputSample.vue';
 

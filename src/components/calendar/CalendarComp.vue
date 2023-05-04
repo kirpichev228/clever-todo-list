@@ -17,7 +17,7 @@
 
 import { ref, onMounted, computed } from 'vue';
 import store from '@/store';
-import VScroll from '@/components/directives/VScroll';
+import VScroll from '@/directives/VScroll';
 import CalendarItem from '@/components/calendar/CalendarItem.vue';
 
 const monthName = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'];

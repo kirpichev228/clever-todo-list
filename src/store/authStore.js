@@ -72,18 +72,6 @@ export const authStore = {
     },
 
     async fetchUser() {
-      // auth.onAuthStateChanged(async (user) => {
-      //   if (user === null) {
-      //     commit('CLEAR_USER');
-      //   } else {
-      //     commit('SET_USER', user);
-
-      //     if (router.isReady() && router.currentRoute.value.path === 'login') {
-      //       router.push('/main');
-      //     }
-      //   }
-      // });
-
       return new Promise((resolve, reject) => {
         const unsubscribe = onAuthStateChanged(
           auth,
@@ -104,10 +92,6 @@ export const authStore = {
         } else {
           commit('SET_USER', user);
           commit('setID', user.uid);
-
-          // if (router.isReady() && router.currentRoute.value.path === 'login') {
-          //   router.push('/main');
-          // }
         }
       });
     },

@@ -8,7 +8,6 @@ module.exports = {
     '@vue/airbnb',
     'plugin:import/errors',
     'plugin:import/warnings',
-    // 'prettier',
   ],
   parserOptions: {
     parser: '@babel/eslint-parser',
@@ -16,7 +15,6 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
-  // plugins: ['prettier'],
   ignorePatterns: ['node_modules/', 'dist/', 'tests/'],
   rules: {
     'jsx-quotes': [1, 'prefer-double'],

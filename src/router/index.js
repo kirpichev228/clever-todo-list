@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router';
 import { auth } from '@/firebase';
 import store from '@/store';
 
-// import App from '@/App.vue';
 import MainPage from '@/views/MainPage.vue';
 import AuthLogin from '@/views/AuthLogin.vue';
 import AuthRegistration from '@/views/AuthRegistration.vue';
@@ -11,7 +10,6 @@ import TaskPage from '@/views/TaskPage.vue';
 const routes = [
   {
     path: '/',
-    // name: 'Login',
     component: AuthLogin,
   },
   {

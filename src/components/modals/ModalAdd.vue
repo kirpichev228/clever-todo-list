@@ -42,7 +42,7 @@ import { useStore } from 'vuex';
 import { computed, ref as vueRef } from 'vue';
 import addNewTaskService from '@/services/addNewTaskService';
 import LoaderSample from '@/components/UI/LoaderSample.vue';
-import VFocus from '@/components/directives/VFocus';
+import VFocus from '@/directives/VFocus';
 import ButtonSample from '@/components/UI/ButtonSample.vue';
 import InputSample from '@/components/UI/InputSample.vue';
 
