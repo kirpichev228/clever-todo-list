@@ -41,12 +41,8 @@
             </template>
             </CheckboxSample>
             <div class="buttons-block">
-              <DeleteIcon
-                @click="deleteTaskService(task.id, currentUserId)"
-              />
-              <EditIcon
-                @click="editTask(index)"
-              />
+              <DeleteIcon @click="deleteTaskService(task.id, currentUserId)"/>
+              <EditIcon @click="editTask(index)"/>
             </div>
           </li>
         </ul>
@@ -120,7 +116,7 @@ const tasksToRemove = computed(
   () => taskListObserver.value.filter((task) => task.date === currentDate.id),
 );
 
-const editTask = async (index) => {
+const editTask = (index) => {
   choosedTask.name = currentTasksObserver.value[index].taskName;
   choosedTask.desc = currentTasksObserver.value[index].taskDesc;
   choosedTask.id = currentTasksObserver.value[index].id;

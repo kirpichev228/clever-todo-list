@@ -7,7 +7,7 @@
         </h2>
         <InputSample
           :inputType="text"
-          @inputVal="(value) => taskFormValue.name = value"
+          @inputVal="setTaskName"
           :inputValue="currentTask.name"
           :length="20"
         >
@@ -15,10 +15,10 @@
         </InputSample>
         <InputSample
           :inputType="text"
-          @inputVal="(value) => taskFormValue.desc = value"
+          @inputVal="setTaskDescription"
           :inputValue="currentTask.desc"
           v-focus
-          >
+        >
           Task Description
         </InputSample>
         <div class="modal-buttons">
@@ -30,7 +30,7 @@
               id="date"
               class="input"
               :valueAsNumber="currentTask.date + 86400000"
-              @change="taskFormValue.date = $event.target.valueAsNumber"
+              @change="setTaskDate($event.target.valueAsNumber)"
             >
           </label>
           <ButtonSample
@@ -51,7 +51,7 @@
 
 <script setup>
 import { useStore } from 'vuex';
-import { ref, computed } from 'vue';
+import { reactive, computed } from 'vue';
 import editTaskService from '@/services/editTaskService';
 import LoaderSample from '@/components/UI/LoaderSample.vue';
 import VFocus from '@/directives/VFocus';
@@ -70,21 +70,38 @@ const props = defineProps({
   },
 });
 
-const taskFormValue = ref({
+const taskFormValue = reactive({
   name: props.currentTask.name,
   desc: props.currentTask.desc,
   date: props.currentTask.date,
 });
 
 const store = useStore();
+
 const currentUserId = store.getters['auth/userID'];
 const loaderObserver = computed(() => store.getters['calendar/loaderStatus']);
 
-const editTask = async () => {
+const setTaskName = (value) => {
+  taskFormValue.name = value;
+};
+
+const setTaskDescription = (value) => {
+  taskFormValue.desc = value;
+};
+
+const setTaskDate = (value) => {
+  console.log(value);
+  taskFormValue.date = value;
+};
+
+const editTask = () => {
+  if (taskFormValue.date === props.currentTask.date) {
+    taskFormValue.date = props.currentTask.date + 10800000;
+  }
   editTaskService(
     currentUserId,
     props.currentTask.id,
-    taskFormValue.value,
+    taskFormValue,
     props.currentTask.index,
   );
   emit('modalEditState', false);

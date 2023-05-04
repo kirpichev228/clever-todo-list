@@ -38,19 +38,13 @@
         <span v-else> You have no tasks for this day </span>
       </div>
       <div class="task-buttons">
-        <ButtonSample
-          @click="redirectToDayPage"
-        >
+        <ButtonSample @click="redirectToDayPage">
           Manage Tasks
         </ButtonSample>
-        <ButtonSample
-          @click="useClearTasks(tasksToRemove(), currentUserId, realtimeDB)"
-        >
+        <ButtonSample @click="useClearTasks(tasksToRemove(), currentUserId, realtimeDB)">
           Clear Tasks
         </ButtonSample>
-        <ButtonSample
-          @click="setWindowActive(false)"
-        >
+        <ButtonSample @click="setWindowActive(false)">
           Close
         </ButtonSample>
       </div>

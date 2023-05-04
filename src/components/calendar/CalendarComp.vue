@@ -2,20 +2,22 @@
   <div class="cal-wrapper" v-scroll ref="calendarRow">
     <div class="cal-row">
       <CalendarItem
-        v-for="day in daysArray" :key="day.id"
+        v-for="day in daysArray"
+        :key="day.id"
         :dayData="day"
-        :tasks="allTasks.filter((el) => el.date === day.id)"
+        :tasks="setDayTasks(day)"
         @click="
           $emit('pickedDay', day);
-          $emit('windowActive', true)"
-      ></CalendarItem>
+          $emit('windowActive', true)
+        "
+      />
     </div>
   </div>
 </template>
 
 <script setup>
-
 import { ref, onMounted, computed } from 'vue';
+
 import store from '@/store';
 import VScroll from '@/directives/VScroll';
 import CalendarItem from '@/components/calendar/CalendarItem.vue';
@@ -39,7 +41,7 @@ const setCalendar = () => {
     const date = new Date(today.getFullYear(), today.getMonth(), 1);
     date.setDate(today.getDate() + i);
     daysArray.value.push({
-      id: date[Symbol.toPrimitive]('number'),
+      id: date.valueOf(),
       day: date.getDate(),
       week: weekDayName[date.getDay()],
       month: monthName[date.getMonth()],
@@ -47,6 +49,8 @@ const setCalendar = () => {
     });
   }
 };
+
+const setDayTasks = (day) => allTasks.value.filter((el) => el.date === day.id);
 
 const nextMonth = () => {
   currentMonth = (currentMonth + 1) % 12;
@@ -67,6 +71,7 @@ const handleScroll = () => {
 
 onMounted(() => {
   setCalendar();
+
   const calendarRowEl = calendarRow.value;
   calendarRowEl.addEventListener('scroll', handleScroll);
 });
