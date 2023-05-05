@@ -16,31 +16,28 @@
 import {
   ref, onMounted, computed, defineEmits,
 } from 'vue';
-
 import store from '@/store';
 import VScroll from '@/directives/VScroll';
 import CalendarItem from '@/components/calendar/CalendarItem.vue';
 
-const monthName = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'];
-const weekDayName = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.'];
+const emit = defineEmits(['pickedDay', 'windowActive']);
 
 const daysArray = ref([]);
 const calendarRow = ref(null);
 
-const emit = defineEmits(['pickedDay', 'windowActive']);
+const monthName = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'];
+const weekDayName = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.'];
 
 const allTasks = computed(() => store.getters['calendar/allTasks']);
 
-let currentMonth = new Date().getMonth();
-let currentYear = new Date().getFullYear();
-let monthFirstDay = new Date(currentYear, currentMonth);
+let currentDay = new Date();
 
 const setCalendar = () => {
-  const numDays = new Date(monthFirstDay.getFullYear(), monthFirstDay.getMonth() + 1, 0).getDate();
+  const numDays = new Date(currentDay.getFullYear(), currentDay.getMonth() + 1, 0).getDate();
 
   for (let i = 0; i < numDays; i++) {
-    const date = new Date(monthFirstDay.getFullYear(), monthFirstDay.getMonth(), 1);
-    date.setDate(monthFirstDay.getDate() + i);
+    const date = new Date(currentDay.getFullYear(), currentDay.getMonth(), 1);
+    date.setDate(currentDay.getDate() + i);
     daysArray.value.push({
       id: date.valueOf(),
       day: date.getDate(),
@@ -58,18 +55,18 @@ const setCurrentDay = (day) => {
   emit('windowActive', true);
 };
 
+let currentMonth = currentDay.getMonth();
+let currentYear = currentDay.getFullYear();
+
 const nextMonth = () => {
   currentMonth = (currentMonth + 1) % 12;
-  if (currentMonth === 0) {
-    currentYear += 1;
-  }
-  monthFirstDay = new Date(currentYear, currentMonth);
+  if (currentMonth === 0) currentYear += 1;
+  currentDay = new Date(currentYear, currentMonth);
   setCalendar();
 };
 
 const handleScroll = () => {
   const calendarRowEl = calendarRow.value;
-
   if (calendarRowEl.scrollLeft + calendarRowEl.offsetWidth >= calendarRowEl.scrollWidth) {
     nextMonth();
   }
@@ -77,7 +74,6 @@ const handleScroll = () => {
 
 onMounted(() => {
   setCalendar();
-
   const calendarRowEl = calendarRow.value;
   calendarRowEl.addEventListener('scroll', handleScroll);
 });
