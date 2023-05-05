@@ -26,5 +26,6 @@ module.exports = {
     'linebreak-style': 0,
     'import/no-unresolved': 0,
     'import/extensions': 0,
+    'vuejs-accessibility/click-events-have-key-events': 0,
   },
 };

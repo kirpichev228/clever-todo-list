@@ -18,8 +18,8 @@
     <div class="task-wrapper">
       <div
         class="tasks-block"
-        :class="{ 'isEmpty': currentTasksObserver.length === 0 }">
-        <h3 v-if="currentTasksObserver.length === 0">
+        :class="{ 'isEmpty': isDayTasksListEmpty }">
+        <h3 v-if="isDayTasksListEmpty">
           You have no tasks for this day
         </h3>
         <ul v-else class="task-list">
@@ -41,8 +41,24 @@
             </template>
             </CheckboxSample>
             <div class="buttons-block">
-              <DeleteIcon @click="deleteTaskService(task.id, currentUserId)"/>
-              <EditIcon @click="editTask(index)"/>
+              <svg
+                viewBox="0 0 1024 1024"
+                width="25px"
+                height="25px"
+                class="trashIcon"
+                @click="deleteTaskService(task.id, currentUserId)"
+              >
+                <use xlink:href="@/assets/icons/delete.svg#trashcan"></use>
+              </svg>
+              <svg
+                viewBox="0 0 64 64"
+                width="25px"
+                height="25px"
+                class="edit"
+                @click="editTask(index)"
+              >
+                <use xlink:href="@/assets/icons/edit.svg#edit"></use>
+              </svg>
             </div>
           </li>
         </ul>
@@ -77,8 +93,6 @@ import ButtonSample from '@/components/UI/ButtonSample.vue';
 import ModalAdd from '@/components/modals/ModalAdd.vue';
 import ModalEdit from '@/components/modals/ModalEdit.vue';
 import CheckboxSample from '@/components/UI/CheckboxSample.vue';
-import DeleteIcon from '@/icons/DeleteIcon.vue';
-import EditIcon from '@/icons/EditIcon.vue';
 
 import { useTaskStatus } from '@/composables/useTaskStatus';
 import { useClearTasks } from '@/composables/useClearTasks';
@@ -103,6 +117,7 @@ const currentUserId = store.getters['auth/userID'];
 
 const taskListObserver = computed(() => store.getters['calendar/allTasks']);
 const currentTasksObserver = computed(() => store.getters['calendar/currentTasks']);
+const isDayTasksListEmpty = computed(() => currentTasksObserver.value.length === 0);
 
 const setModalAddState = (data) => {
   modalState.add = data;
@@ -193,6 +208,18 @@ const editTask = (index) => {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.trashIcon,
+.edit {
+  fill: var(--color-static);
+  transition-duration: 0s;
+}
+
+.trashIcon:hover,
+.edit:hover {
+  cursor: pointer;
+  fill: var(--color-hover);
 }
 
 .tasks-buttons {
