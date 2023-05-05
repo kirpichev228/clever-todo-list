@@ -10,10 +10,6 @@ import TaskPage from '@/views/TaskPage.vue';
 const routes = [
   {
     path: '/',
-    component: AuthLogin,
-  },
-  {
-    path: '/main',
     name: 'Main',
     component: MainPage,
     meta: {
@@ -31,7 +27,7 @@ const routes = [
     component: AuthRegistration,
   },
   {
-    path: '/main/:id',
+    path: '/task/:id',
     name: 'TaskPage',
     component: TaskPage,
     meta: {
@@ -47,8 +43,8 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   await store.dispatch('auth/fetchUser');
-  if ((to.path === '/login' || to.path === '/') && auth.currentUser) {
-    next('/main');
+  if ((to.path === '/login') && auth.currentUser) {
+    next('/');
     return;
   }
 

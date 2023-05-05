@@ -27,5 +27,6 @@ module.exports = {
     'import/no-unresolved': 0,
     'import/extensions': 0,
     'vuejs-accessibility/click-events-have-key-events': 0,
+    'class-methods-use-this': 0,
   },
 };

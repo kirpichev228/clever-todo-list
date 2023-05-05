@@ -8,6 +8,10 @@ import { auth } from '@/firebase/index';
 import router from '@/router';
 import store from '.';
 
+import AuthService from '@/services/authService';
+
+const authService = new AuthService();
+
 export const authStore = {
   state: {
     user: null,
@@ -40,10 +44,10 @@ export const authStore = {
       const { email, password } = details;
 
       try {
-        await signInWithEmailAndPassword(auth, email, password);
-        commit('setUser', auth.currentUser);
+        const user = await authService.login(email, password);
+        commit('setUser', user);
         commit('setID', auth.lastNotifiedUid);
-        router.push('/main');
+        router.push('/');
       } catch (error) {
         store.commit('setErrorMessage', error, { root: true });
         store.commit('setErrorToastStatus', { root: true });
@@ -54,10 +58,10 @@ export const authStore = {
       const { email, password } = details;
 
       try {
-        await createUserWithEmailAndPassword(auth, email, password);
-        commit('setUser', auth.currentUser);
+        const user = await authService.register(email, password);
+        commit('setUser', user);
         commit('setID', auth.lastNotifiedUid);
-        router.push('/main');
+        router.push('/');
       } catch (error) {
         store.commit('setErrorMessage', error, { root: true });
         store.commit('setErrorToastStatus', { root: true });
@@ -65,23 +69,19 @@ export const authStore = {
     },
 
     async logout({ commit }) {
-      await signOut(auth);
-      commit('clearUser');
-      commit('clearID');
-      router.push('/login');
+      try {
+        await authService.logout();
+        commit('clearUser');
+        commit('clearID');
+        router.push('/login');
+      } catch (error) {
+        store.commit('setErrorMessage', error, { root: true });
+        store.commit('setErrorToastStatus', { root: true });
+      }
     },
 
     async fetchUser() {
-      return new Promise((resolve, reject) => {
-        const unsubscribe = onAuthStateChanged(
-          auth,
-          (user) => {
-            unsubscribe();
-            resolve(user);
-          },
-          reject,
-        );
-      });
+      return authService.fetchUser();
     },
 
     async setUser({ commit }) {

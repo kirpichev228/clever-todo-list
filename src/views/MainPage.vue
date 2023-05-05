@@ -99,7 +99,7 @@ const getTasks = async () => {
 };
 
 const redirectToDayPage = () => {
-  router.push(`/main/${currentDay.value.id}`);
+  router.push(`/task/${currentDay.value.id}`);
   store.commit('calendar/setCurrentDate', currentDay);
 };
 

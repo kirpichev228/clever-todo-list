@@ -43,8 +43,8 @@
             <div class="buttons-block">
               <svg
                 viewBox="0 0 1024 1024"
-                width="25px"
-                height="25px"
+                width="28px"
+                height="28px"
                 class="trashIcon"
                 @click="deleteTaskService(task.id, currentUserId)"
               >
@@ -52,8 +52,8 @@
               </svg>
               <svg
                 viewBox="0 0 64 64"
-                width="25px"
-                height="25px"
+                width="28px"
+                height="28px"
                 class="edit"
                 @click="editTask(index)"
               >
@@ -74,7 +74,7 @@
             Clear Tasks
           </ButtonSample>
         </div>
-        <ButtonSample @click="$router.push('/main')">
+        <ButtonSample @click="$router.push('/')">
           Back To Calendar
         </ButtonSample>
       </div>
@@ -111,6 +111,16 @@ const choosedTask = reactive({
   date: NaN,
   index: NaN,
 });
+
+// модуль для ошибок в сторе
+// сервисы
+// getTasks из мейн пейджа вынести в стор
+// вынести роутер пуш из экшена authStore
+// ModalAdd ModalEdit сделать одним целым
+
+// переименовать модули стора
+// рзабить на модули user, auth, tasks(calendar ex)
+// работа с датами происходит на странице
 
 const currentDate = store.getters['calendar/currentDate'];
 const currentUserId = store.getters['auth/userID'];

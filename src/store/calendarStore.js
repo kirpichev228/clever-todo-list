@@ -37,8 +37,8 @@ export const calendarStore = {
         state.currentTasks.splice(data.taskIndex, 1);
       }
     },
-    changeLoaderStatus(state, data) {
-      state.loaderStatus = data;
+    changeLoaderStatus(state, status) {
+      state.loaderStatus = status;
     },
     changeTaskStatus(state, data) {
       state.currentTasks[data.taskIndex].isDone = data.taskStatus;
