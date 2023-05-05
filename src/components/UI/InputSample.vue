@@ -18,10 +18,7 @@ import { defineProps } from 'vue';
 
 const props = defineProps({
   type: String,
-  placeholder: {
-    type: String,
-    required: false,
-  },
+  placeholder: String,
   length: Number,
 
   modelValue: String,

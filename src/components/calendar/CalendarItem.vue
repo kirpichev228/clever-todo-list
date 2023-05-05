@@ -14,8 +14,8 @@
       </div>
     </div>
     <div class="cal-tasks">
-      <div v-if="taskPlanned" class="cal-planned"></div>
-      <div v-if="taskDone" class="cal-done"></div>
+      <div v-if="isTaskPlanned" class="cal-planned"></div>
+      <div v-if="isTaskDone" class="cal-done"></div>
     </div>
   </div>
 </template>
@@ -33,8 +33,8 @@ const props = defineProps({
   tasks: Array,
 });
 
-const taskPlanned = computed(() => !!props.tasks.find((task) => !task.isDone));
-const taskDone = computed(() => !!props.tasks.find((task) => task.isDone));
+const isTaskPlanned = computed(() => !!props.tasks.find((task) => !task.isDone));
+const isTaskDone = computed(() => !!props.tasks.find((task) => task.isDone));
 
 </script>
 

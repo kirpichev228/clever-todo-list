@@ -6,17 +6,16 @@
         :key="day.id"
         :dayData="day"
         :tasks="setDayTasks(day)"
-        @click="
-          $emit('pickedDay', day);
-          $emit('windowActive', true)
-        "
+        @click="setCurrentDay(day)"
       />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import {
+  ref, onMounted, computed, defineEmits,
+} from 'vue';
 
 import store from '@/store';
 import VScroll from '@/directives/VScroll';
@@ -28,18 +27,20 @@ const weekDayName = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.'];
 const daysArray = ref([]);
 const calendarRow = ref(null);
 
+const emit = defineEmits(['pickedDay', 'windowActive']);
+
 const allTasks = computed(() => store.getters['calendar/allTasks']);
 
 let currentMonth = new Date().getMonth();
 let currentYear = new Date().getFullYear();
-let today = new Date(currentYear, currentMonth);
+let monthFirstDay = new Date(currentYear, currentMonth);
 
 const setCalendar = () => {
-  const numDays = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+  const numDays = new Date(monthFirstDay.getFullYear(), monthFirstDay.getMonth() + 1, 0).getDate();
 
   for (let i = 0; i < numDays; i++) {
-    const date = new Date(today.getFullYear(), today.getMonth(), 1);
-    date.setDate(today.getDate() + i);
+    const date = new Date(monthFirstDay.getFullYear(), monthFirstDay.getMonth(), 1);
+    date.setDate(monthFirstDay.getDate() + i);
     daysArray.value.push({
       id: date.valueOf(),
       day: date.getDate(),
@@ -52,12 +53,17 @@ const setCalendar = () => {
 
 const setDayTasks = (day) => allTasks.value.filter((el) => el.date === day.id);
 
+const setCurrentDay = (day) => {
+  emit('pickedDay', day);
+  emit('windowActive', true);
+};
+
 const nextMonth = () => {
   currentMonth = (currentMonth + 1) % 12;
   if (currentMonth === 0) {
     currentYear += 1;
   }
-  today = new Date(currentYear, currentMonth);
+  monthFirstDay = new Date(currentYear, currentMonth);
   setCalendar();
 };
 

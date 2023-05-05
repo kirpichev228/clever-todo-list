@@ -103,8 +103,9 @@ const redirectToDayPage = () => {
   store.commit('calendar/setCurrentDate', currentDay);
 };
 
-const tasksToRemove = () => taskListObserver.value
-  .filter((task) => task.date === currentDay.value.id);
+const tasksToRemove = computed(
+  () => taskListObserver.value.filter((task) => task.date === currentDay.value.id),
+);
 
 onMounted(() => {
   getTasks();
