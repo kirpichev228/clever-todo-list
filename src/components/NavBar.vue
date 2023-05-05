@@ -18,6 +18,7 @@
 <script setup>
 import { computed } from 'vue';
 import { useStore } from 'vuex';
+import router from '@/router';
 import LoaderSample from '@/components/UI/LoaderSample.vue';
 import ButtonSample from './UI/ButtonSample.vue';
 
@@ -26,9 +27,15 @@ const store = useStore();
 const loaderObserver = computed(() => store.getters['calendar/loaderStatus']);
 const userObserver = computed(() => store.getters['auth/user']);
 
-const logout = () => {
-  store.dispatch('auth/logout');
-  store.dispatch('calendar/clearAllTasks');
+const logout = async () => {
+  try {
+    await store.dispatch('auth/logout');
+    store.dispatch('calendar/clearAllTasks');
+    router.push('/login');
+  } catch (error) {
+    store.commit('setErrorMessage', error);
+    store.commit('setErrorToastStatus');
+  }
 };
 
 </script>

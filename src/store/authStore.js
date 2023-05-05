@@ -1,13 +1,5 @@
-import {
-  createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  signOut,
-} from 'firebase/auth';
 import { auth } from '@/firebase/index';
 import router from '@/router';
-import store from '.';
-
 import AuthService from '@/services/authService';
 
 const authService = new AuthService();
@@ -42,42 +34,22 @@ export const authStore = {
   actions: {
     async login({ commit }, details) {
       const { email, password } = details;
-
-      try {
-        const user = await authService.login(email, password);
-        commit('setUser', user);
-        commit('setID', auth.lastNotifiedUid);
-        router.push('/');
-      } catch (error) {
-        store.commit('setErrorMessage', error, { root: true });
-        store.commit('setErrorToastStatus', { root: true });
-      }
+      const user = await authService.login(email, password);
+      commit('setUser', user);
+      commit('setID', auth.lastNotifiedUid);
     },
 
     async register({ commit }, details) {
       const { email, password } = details;
-
-      try {
-        const user = await authService.register(email, password);
-        commit('setUser', user);
-        commit('setID', auth.lastNotifiedUid);
-        router.push('/');
-      } catch (error) {
-        store.commit('setErrorMessage', error, { root: true });
-        store.commit('setErrorToastStatus', { root: true });
-      }
+      const user = await authService.register(email, password);
+      commit('setUser', user);
+      commit('setID', auth.lastNotifiedUid);
     },
 
     async logout({ commit }) {
-      try {
-        await authService.logout();
-        commit('clearUser');
-        commit('clearID');
-        router.push('/login');
-      } catch (error) {
-        store.commit('setErrorMessage', error, { root: true });
-        store.commit('setErrorToastStatus', { root: true });
-      }
+      await authService.logout();
+      commit('clearUser');
+      commit('clearID');
     },
 
     async fetchUser() {

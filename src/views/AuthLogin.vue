@@ -33,6 +33,7 @@
 <script setup>
 import { useStore } from 'vuex';
 import { reactive } from 'vue';
+import router from '@/router';
 import VFocus from '@/directives/VFocus';
 import ButtonSample from '../components/UI/ButtonSample.vue';
 import InputSample from '../components/UI/InputSample.vue';
@@ -43,8 +44,14 @@ const loginForm = reactive({
 });
 const store = useStore();
 
-const login = () => {
-  store.dispatch('auth/login', loginForm);
+const login = async () => {
+  try {
+    await store.dispatch('auth/login', loginForm);
+    router.push('/');
+  } catch (error) {
+    store.commit('setErrorMessage', error);
+    store.commit('setErrorToastStatus');
+  }
 };
 
 </script>

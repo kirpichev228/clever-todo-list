@@ -47,6 +47,7 @@
 <script setup>
 import { useStore } from 'vuex';
 import { computed, reactive } from 'vue';
+import router from '@/router';
 import VFocus from '@/directives/VFocus';
 import ButtonSample from '../components/UI/ButtonSample.vue';
 import InputSample from '../components/UI/InputSample.vue';
@@ -58,8 +59,14 @@ const registerForm = reactive({
 });
 const store = useStore();
 
-const register = () => {
-  store.dispatch('auth/register', registerForm);
+const register = async () => {
+  try {
+    await store.dispatch('auth/register', registerForm);
+    router.push('/');
+  } catch (error) {
+    store.commit('setErrorMessage', error);
+    store.commit('setErrorToastStatus');
+  }
 };
 
 const isPasswordsMatch = computed(() => registerForm.confirm === registerForm.password);
