@@ -1,3 +1,6 @@
+import { onValue } from 'firebase/database';
+import tasksService from '@/services/tasksService';
+
 export const calendarStore = {
   namespaced: true,
   state: {
@@ -42,6 +45,16 @@ export const calendarStore = {
     },
     changeTaskStatus(state, data) {
       state.currentTasks[data.taskIndex].isDone = data.taskStatus;
+    },
+  },
+  actions: {
+    async getTasks({ commit }, userId) {
+      const taskList = await tasksService.getTasks(userId);
+      onValue(taskList, (snapshot) => {
+        if (snapshot.val() !== null) {
+          commit('setAllTasks', Object.values(snapshot.val()));
+        }
+      });
     },
   },
   getters: {

@@ -28,6 +28,10 @@ class TasksService {
   async setTaskStatus(userId, taskId, taskStatus) {
     await set(ref(realtimeDB, `users/${userId}/${taskId}/isDone`), taskStatus);
   }
+
+  async getTasks(userId) {
+    return ref(realtimeDB, `users/${userId}`);
+  }
 }
 
 const tasksService = new TasksService();

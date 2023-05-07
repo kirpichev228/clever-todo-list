@@ -56,7 +56,6 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { useStore } from 'vuex';
-import { ref as firebaseRef, onValue } from 'firebase/database';
 import { realtimeDB } from '@/firebase/index';
 import router from '@/router';
 import CalendarComp from '@/components/calendar/CalendarComp.vue';
@@ -89,12 +88,7 @@ const setCurrentTasks = () => {
 
 const getTasks = async () => {
   store.commit('calendar/changeLoaderStatus', true);
-  const taskListFromServer = firebaseRef(realtimeDB, `users/${currentUserId}`);
-  onValue(taskListFromServer, (snapshot) => {
-    if (snapshot.val() !== null) {
-      store.commit('calendar/setAllTasks', Object.values(snapshot.val()));
-    }
-  });
+  await store.dispatch('calendar/getTasks', currentUserId);
   store.commit('calendar/changeLoaderStatus', false);
 };
 
