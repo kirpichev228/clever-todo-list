@@ -46,7 +46,7 @@
                 width="28px"
                 height="28px"
                 class="trashIcon"
-                @click="deleteTaskService(task.id, currentUserId)"
+                @click="deleteTask(task.id)"
               >
                 <use xlink:href="@/assets/icons/delete.svg#trashcan"></use>
               </svg>
@@ -87,7 +87,7 @@ import { useStore } from 'vuex';
 import { computed, reactive } from 'vue';
 
 import { realtimeDB } from '@/firebase/index';
-import deleteTaskService from '@/services/deleteTaskService';
+import tasksService from '@/services/tasksService';
 
 import ButtonSample from '@/components/UI/ButtonSample.vue';
 import ModalAdd from '@/components/modals/ModalAdd.vue';
@@ -140,6 +140,18 @@ const setModalEditState = (data) => {
 const tasksToRemove = computed(
   () => taskListObserver.value.filter((task) => task.date === currentDate.id),
 );
+
+const deleteTask = async (taskId) => {
+  try {
+    store.commit('calendar/changeLoaderStatus', true);
+    await tasksService.deleteTask(taskId, currentUserId);
+    store.commit('calendar/deleteTask', taskId);
+    store.commit('calendar/changeLoaderStatus', false);
+  } catch (error) {
+    store.commit('setErrorMessage', error);
+    store.commit('setErrorToastStatus');
+  }
+};
 
 const editTask = (index) => {
   choosedTask.name = currentTasksObserver.value[index].taskName;

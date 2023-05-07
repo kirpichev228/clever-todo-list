@@ -1,5 +1,5 @@
-import { ref, update } from 'firebase/database';
 import store from '@/store';
+import tasksService from '@/services/tasksService';
 
 export async function useClearTasks(tasksToRemove, userId, db) {
   store.commit('calendar/changeLoaderStatus', true);
@@ -10,7 +10,7 @@ export async function useClearTasks(tasksToRemove, userId, db) {
   }, {});
 
   try {
-    await update(ref(db), updates);
+    await tasksService.clearTasks(db, updates);
     store.commit('calendar/clearTasks');
     store.commit('calendar/changeLoaderStatus', false);
   } catch (error) {

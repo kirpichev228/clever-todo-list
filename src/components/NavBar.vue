@@ -30,7 +30,7 @@ const userObserver = computed(() => store.getters['auth/user']);
 const logout = async () => {
   try {
     await store.dispatch('auth/logout');
-    store.dispatch('calendar/clearAllTasks');
+    store.commit('calendar/clearAllTasks');
     router.push('/login');
   } catch (error) {
     store.commit('setErrorMessage', error);

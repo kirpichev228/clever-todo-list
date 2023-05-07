@@ -52,7 +52,7 @@
 <script setup>
 import { useStore } from 'vuex';
 import { reactive, computed } from 'vue';
-import editTaskService from '@/services/editTaskService';
+import tasksService from '@/services/tasksService';
 import LoaderSample from '@/components/UI/LoaderSample.vue';
 import VFocus from '@/directives/VFocus';
 import ButtonSample from '@/components/UI/ButtonSample.vue';
@@ -85,16 +85,28 @@ const setTaskDate = (value) => {
   taskFormValue.date = value;
 };
 
-const editTask = () => {
+const editTask = async () => {
   if (taskFormValue.date === props.currentTask.date) {
     taskFormValue.date = props.currentTask.date + 10800000;
   }
-  editTaskService(
-    currentUserId,
-    props.currentTask.id,
-    taskFormValue,
-    props.currentTask.index,
-  );
+  try {
+    store.commit('calendar/changeLoaderStatus', true);
+    await tasksService.editTask(
+      currentUserId,
+      props.currentTask.id,
+      taskFormValue,
+    );
+    store.commit('calendar/editTask', {
+      taskIndex: props.currentTask.index,
+      taskName: taskFormValue.name,
+      taskDesc: taskFormValue.desc,
+      taskDate: taskFormValue.date - 10800000,
+    });
+    store.commit('calendar/changeLoaderStatus', false);
+  } catch (error) {
+    store.commit('setErrorMessage', error);
+    store.commit('setErrorToastStatus');
+  }
   emit('modalEditState', false);
 };
 

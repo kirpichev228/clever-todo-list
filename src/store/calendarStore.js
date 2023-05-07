@@ -44,38 +44,6 @@ export const calendarStore = {
       state.currentTasks[data.taskIndex].isDone = data.taskStatus;
     },
   },
-  actions: {
-    setCurrentDate({ commit }, data) {
-      commit('setCurrentDay', data);
-    },
-    setCurrentTasks({ commit }, data) {
-      commit('setCurrentTasks', data);
-    },
-    setAllTasks({ commit }, data) {
-      commit('setAllTasks', data);
-    },
-    addTask({ commit }, data) {
-      commit('addTask', data);
-    },
-    clearTasks({ commit }) {
-      commit('clearTasks');
-    },
-    clearAllTasks({ commit }) {
-      commit('clearAllTasks');
-    },
-    deleteTask({ commit }, data) {
-      commit('deleteTask', data);
-    },
-    editTask({ commit }, data) {
-      commit('editTask', data);
-    },
-    changeLoaderStatus({ commit }, data) {
-      commit('changeLoaderStatus', data);
-    },
-    changeTaskStatus({ commit }, data) {
-      commit('changeTaskStatus', data);
-    },
-  },
   getters: {
     currentDate(state) {
       return state.currentDate;

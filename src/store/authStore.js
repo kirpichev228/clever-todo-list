@@ -1,8 +1,5 @@
 import { auth } from '@/firebase/index';
-import router from '@/router';
-import AuthService from '@/services/authService';
-
-const authService = new AuthService();
+import authService from '@/services/authService';
 
 export const authStore = {
   state: {

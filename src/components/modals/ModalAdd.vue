@@ -42,7 +42,7 @@
 <script setup>
 import { useStore } from 'vuex';
 import { computed, reactive } from 'vue';
-import addNewTaskService from '@/services/addNewTaskService';
+import tasksService from '@/services/tasksService';
 import LoaderSample from '@/components/UI/LoaderSample.vue';
 import VFocus from '@/directives/VFocus';
 import ButtonSample from '@/components/UI/ButtonSample.vue';
@@ -60,7 +60,7 @@ const store = useStore();
 const currentUserId = store.getters['auth/userID'];
 const loaderObserver = computed(() => store.getters['calendar/loaderStatus']);
 
-const addNewTask = () => {
+const addNewTask = async () => {
   const taskID = Date.now();
   const taskToPush = {
     id: taskID,
@@ -69,7 +69,15 @@ const addNewTask = () => {
     isDone: false,
     date: store.getters['calendar/currentDate'].id,
   };
-  addNewTaskService(taskToPush, taskID, currentUserId);
+  try {
+    store.commit('calendar/changeLoaderStatus', true);
+    await tasksService.addNewTask(taskToPush, taskID, currentUserId);
+    store.commit('calendar/addTask', taskToPush);
+    store.commit('calendar/changeLoaderStatus', false);
+  } catch (error) {
+    store.commit('setErrorMessage', error);
+    store.commit('setErrorToastStatus');
+  }
   emit('modalAddState', false);
 };
 

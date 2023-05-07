@@ -41,7 +41,7 @@
         <ButtonSample @click="redirectToDayPage">
           Manage Tasks
         </ButtonSample>
-        <ButtonSample @click="useClearTasks(tasksToRemove(), currentUserId, realtimeDB)">
+        <ButtonSample @click="useClearTasks(tasksToRemove, currentUserId, realtimeDB)">
           Clear Tasks
         </ButtonSample>
         <ButtonSample @click="setWindowActive(false)">
