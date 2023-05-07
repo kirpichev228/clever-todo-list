@@ -75,8 +75,8 @@ const addNewTask = async () => {
     store.commit('calendar/addTask', taskToPush);
     store.commit('calendar/changeLoaderStatus', false);
   } catch (error) {
-    store.commit('setErrorMessage', error);
-    store.commit('setErrorToastStatus');
+    store.commit('error/setErrorMessage', error);
+    store.commit('error/setErrorToastStatus');
   }
   emit('modalAddState', false);
 };

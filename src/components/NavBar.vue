@@ -33,8 +33,8 @@ const logout = async () => {
     store.commit('calendar/clearAllTasks');
     router.push('/login');
   } catch (error) {
-    store.commit('setErrorMessage', error);
-    store.commit('setErrorToastStatus');
+    store.commit('error/setErrorMessage', error);
+    store.commit('error/setErrorToastStatus');
   }
 };
 

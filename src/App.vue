@@ -18,7 +18,7 @@ import ErrorToast from './components/UI/ErrorToast.vue';
 
 const store = useStore();
 
-const errorToastStatus = computed(() => store.getters.errorToastStatus);
+const errorToastStatus = computed(() => store.getters['error/errorToastStatus']);
 
 onBeforeMount(() => {
   store.dispatch('auth/fetchUser');

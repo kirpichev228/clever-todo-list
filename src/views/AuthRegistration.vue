@@ -64,8 +64,8 @@ const register = async () => {
     await store.dispatch('auth/register', registerForm);
     router.push('/');
   } catch (error) {
-    store.commit('setErrorMessage', error);
-    store.commit('setErrorToastStatus');
+    store.commit('error/setErrorMessage', error);
+    store.commit('error/setErrorToastStatus');
   }
 };
 

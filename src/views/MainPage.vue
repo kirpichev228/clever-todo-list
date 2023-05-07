@@ -87,9 +87,14 @@ const setCurrentTasks = () => {
 };
 
 const getTasks = async () => {
-  store.commit('calendar/changeLoaderStatus', true);
-  await store.dispatch('calendar/getTasks', currentUserId);
-  store.commit('calendar/changeLoaderStatus', false);
+  try {
+    store.commit('calendar/changeLoaderStatus', true);
+    await store.dispatch('calendar/getTasks', currentUserId);
+    store.commit('calendar/changeLoaderStatus', false);
+  } catch (error) {
+    store.commit('error/setErrorMessage', error);
+    store.commit('error/setErrorToastStatus');
+  }
 };
 
 const redirectToDayPage = () => {

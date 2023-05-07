@@ -8,7 +8,7 @@ export async function useTaskStatus(taskStatus, taskId, taskIndex, userId) {
     store.commit('calendar/changeTaskStatus', { taskStatus, taskIndex });
     store.commit('calendar/changeLoaderStatus', false);
   } catch (error) {
-    store.commit('setErrorMessage', error);
-    store.commit('setErrorToastStatus');
+    store.commit('error/setErrorMessage', error);
+    store.commit('error/setErrorToastStatus');
   }
 }

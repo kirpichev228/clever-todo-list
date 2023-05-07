@@ -112,10 +112,10 @@ const choosedTask = reactive({
   index: NaN,
 });
 
-// модуль для ошибок в сторе
-// сервисы
-// getTasks из мейн пейджа вынести в стор
-// вынести роутер пуш из экшена authStore
+// модуль для ошибок в сторе готово
+// сервисы готово
+// getTasks из мейн пейджа вынести в стор готово
+// вынести роутер пуш из экшена authStore готово
 // ModalAdd ModalEdit сделать одним целым
 
 // переименовать модули стора
@@ -148,8 +148,8 @@ const deleteTask = async (taskId) => {
     store.commit('calendar/deleteTask', taskId);
     store.commit('calendar/changeLoaderStatus', false);
   } catch (error) {
-    store.commit('setErrorMessage', error);
-    store.commit('setErrorToastStatus');
+    store.commit('error/setErrorMessage', error);
+    store.commit('error/setErrorToastStatus');
   }
 };
 

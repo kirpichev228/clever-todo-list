@@ -49,8 +49,8 @@ const login = async () => {
     await store.dispatch('auth/login', loginForm);
     router.push('/');
   } catch (error) {
-    store.commit('setErrorMessage', error);
-    store.commit('setErrorToastStatus');
+    store.commit('error/setErrorMessage', error);
+    store.commit('error/setErrorToastStatus');
   }
 };
 

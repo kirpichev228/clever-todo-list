@@ -8,7 +8,7 @@
 import { computed } from 'vue';
 import store from '@/store';
 
-const errorMessage = computed(() => store.getters.errorMessage);
+const errorMessage = computed(() => store.getters['error/errorMessage']);
 
 </script>
 
