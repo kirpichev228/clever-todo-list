@@ -112,16 +112,6 @@ const choosedTask = reactive({
   index: NaN,
 });
 
-// модуль для ошибок в сторе готово
-// сервисы готово
-// getTasks из мейн пейджа вынести в стор готово
-// вынести роутер пуш из экшена authStore готово
-// ModalAdd ModalEdit сделать одним целым
-
-// переименовать модули стора
-// рзабить на модули user, auth, tasks(calendar ex)
-// работа с датами происходит на странице
-
 const currentDate = store.getters['calendar/currentDate'];
 const currentUserId = store.getters['auth/userID'];
 
