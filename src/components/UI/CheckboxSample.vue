@@ -1,5 +1,5 @@
 <template>
-  <label :for="labelFor" class="custom-checkbox">
+  <label class="custom-checkbox">
     <div class="description">
       <slot name="description"></slot>
     </div>
@@ -9,8 +9,6 @@
     </div>
     <input
       type="checkbox"
-      :name="labelFor"
-      :id="labelFor"
       class="input"
       @change="$emit('checkboxChange', $event.target.checked)"
       :checked="isDone"
@@ -22,7 +20,6 @@
 <script setup>
 
 defineProps({
-  labelFor: String,
   isDone: Boolean,
 });
 

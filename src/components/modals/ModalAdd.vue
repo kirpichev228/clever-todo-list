@@ -9,7 +9,7 @@
           placeholder="Enter Task Name"
           type="text"
           v-model="taskForm.name"
-          length="20"
+          length=20
           v-focus
         >
           Task Name

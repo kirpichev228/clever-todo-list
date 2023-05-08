@@ -30,7 +30,6 @@
           >
             <CheckboxSample
               :isDone="task.isDone"
-              :labelFor="task.taskName"
               @checkboxChange="(data) => useTaskStatus(data, task.id, index, currentUserId)"
             >
             <template #heading>

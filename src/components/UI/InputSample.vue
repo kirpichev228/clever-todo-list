@@ -1,4 +1,3 @@
-<!-- eslint-disable vuejs-accessibility/label-has-for -->
 <template>
   <label>
     <slot></slot>
@@ -19,7 +18,7 @@ import { defineProps } from 'vue';
 const props = defineProps({
   type: String,
   placeholder: String,
-  length: Number,
+  length: String,
 
   modelValue: String,
 });

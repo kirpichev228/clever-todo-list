@@ -22,7 +22,6 @@
             v-for="(task, index) in currentTasksObserver" :key="task.id"
           >
             <CheckboxSample
-              :labelFor="task.id"
               :isDone="task.isDone"
               @checkboxChange="(data) => useTaskStatus(data, task.id, index, currentUserId)"
             >

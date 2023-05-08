@@ -28,5 +28,6 @@ module.exports = {
     'import/extensions': 0,
     'vuejs-accessibility/click-events-have-key-events': 0,
     'class-methods-use-this': 0,
+    'vuejs-accessibility/label-has-for': 0,
   },
 };
